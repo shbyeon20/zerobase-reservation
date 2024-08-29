@@ -1,0 +1,19 @@
+### Send POST request with json body
+POST http://localhost:8080/partners
+Content-Type: application/json
+
+{
+  "partnerId": "bsh6226",
+  "partnerName" : "변상화",
+  "businessId": 1234567890
+}
+
+### Send POST request with json body
+POST http://localhost:8080/partners
+Content-Type: application/json
+
+{
+  "partnerId": "jjh6226",
+  "partnerName" : "조정해",
+  "businessId": 1234567890
+}
