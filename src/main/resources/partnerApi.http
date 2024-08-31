@@ -5,7 +5,8 @@ Content-Type: application/json
 {
   "partnerId": "bsh6226",
   "partnerName" : "변상화",
-  "businessId": 1234567890
+  "businessId": 1234567890,
+  "phoneNumber" : "01041589332"
 }
 
 ### Send POST request with json body
@@ -15,5 +16,6 @@ Content-Type: application/json
 {
   "partnerId": "jjh6226",
   "partnerName" : "조정해",
-  "businessId": 1234567890
+  "businessId": 1234567890,
+  "phoneNumber" : "01041589332"
 }

@@ -1,0 +1,19 @@
+### Send POST request with json body
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+  "userId": "kkc123",
+  "userName" : "강감찬",
+  "phoneNumber": "01041589332"
+}
+
+### Send POST request with json body
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+  "userId": "alexander1",
+  "userName" : "알렉산더",
+  "phoneNumber": "01041589332"
+}

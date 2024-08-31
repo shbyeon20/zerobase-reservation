@@ -2,12 +2,7 @@ package com.zerobase.zerobasereservation.dto;
 
 
 import com.zerobase.zerobasereservation.entity.PartnerEntity;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Size;
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 
 @Builder

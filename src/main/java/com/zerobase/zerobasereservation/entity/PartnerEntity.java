@@ -19,7 +19,9 @@ public class PartnerEntity {
     @Column(unique = true)
     private String partnerId;
     private String partnerName;
-    private Long businessId;
+    private String businessId;
+    private String phoneNumber;
+
     private LocalDateTime registeredAt;
 
 

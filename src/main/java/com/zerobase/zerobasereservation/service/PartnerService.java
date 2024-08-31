@@ -19,18 +19,19 @@ public class PartnerService {
     private final PartnerRepository partnerRepository;
 
     @Transactional
-    public PartnerDto createPartner(String partnerId,  String partnerName,
-                              Long businessId) {
+    public PartnerDto createPartner(String partnerId, String partnerName,
+                                    String businessId, String phoneNumber) {
         log.info("Create partner with id {} and name {}", partnerId, partnerName);
 
         // todo : 중복된 데이터에 대한 exception handling 처리할 것
         PartnerEntity partnerEntity = partnerRepository.save(
                 PartnerEntity.builder().
-                partnerId(partnerId)
-                .partnerName(partnerName)
-                .businessId(businessId)
-                .registeredAt(LocalDateTime.now())
-                .build()
+                        partnerId(partnerId)
+                        .partnerName(partnerName)
+                        .businessId(businessId)
+                        .phoneNumber(phoneNumber)
+                        .registeredAt(LocalDateTime.now())
+                        .build()
         );
 
         return PartnerDto.fromEntity(partnerEntity);

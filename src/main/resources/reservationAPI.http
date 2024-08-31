@@ -1,0 +1,19 @@
+### Send POST request with json body
+POST http://localhost:8080/reservations
+Content-Type: application/json
+
+{
+  "userId": "kkc123",
+  "storeId" : "투썸플레이스동대문",
+  "reservationTime": "2024-08-30T14:00"
+}
+
+### Send POST request with json body
+POST http://localhost:8080/reservations
+Content-Type: application/json
+
+{
+  "userId": "alexander1",
+  "storeId" : "스타벅스동대문",
+  "reservationTime": "2024-09-02T14:00"
+}

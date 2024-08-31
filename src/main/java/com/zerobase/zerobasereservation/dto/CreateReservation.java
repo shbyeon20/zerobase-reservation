@@ -8,8 +8,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 
-public class CreateStore {
+
+public class CreateReservation {
 
 
     @Getter @Setter
@@ -17,14 +19,11 @@ public class CreateStore {
     public static class Request {
 
         @Size(min=1,max=10)
-        private String partnerId;
+        private String userId;
         @Size(min=1,max=10)
         private String storeId;
-
         @NotNull
-        private String address;
-        private String storeComment;
-
+        private LocalDateTime reservationTime;
 
     }
 
@@ -33,18 +32,18 @@ public class CreateStore {
     @Builder
     @AllArgsConstructor
     public static class Response {
-        private String partnerId;
+        private String reservationId;
+        private String userId;
         private String storeId;
-        private String address;
-        private String storeComment;
+        private LocalDateTime reservationTime;
 
 
-        public static Response fromDto(StoreDto storeDto) {
+        public static Response fromDto(ReservationDto reservationDto) {
             return Response.builder()
-                    .partnerId(storeDto.getPartnerId())
-                    .storeId(storeDto.getStoreId())
-                    .address(storeDto.getAddress())
-                    .storeComment(storeDto.getStoreComment())
+                    .reservationId(reservationDto.getReservationId())
+                    .userId(reservationDto.getUserID())
+                    .storeId(reservationDto.getStoreId())
+                    .reservationTime(reservationDto.getReservationTime())
                     .build();
         }
     }

@@ -1,9 +1,7 @@
 package com.zerobase.zerobasereservation.controller;
 
-import com.zerobase.zerobasereservation.dto.CreatePartner;
 import com.zerobase.zerobasereservation.dto.CreateUser;
-import com.zerobase.zerobasereservation.dto.PartnerDto;
-import com.zerobase.zerobasereservation.service.PartnerService;
+import com.zerobase.zerobasereservation.dto.UserDto;
 import com.zerobase.zerobasereservation.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,16 +22,18 @@ public class UserController {
     @PostMapping("/users")
     public ResponseEntity<CreateUser.Response> createUser(
             @RequestBody @Valid CreateUser.Request request) {
-        log.info("Creating user : {}", request);
 
-        PartnerDto partner = userService.createUser(
-                request.getPartnerId(),
-                request.getPartnerName(),
-                request.getBusinessId()
+        log.info("Creating user request received : "+ request.getUserId());
+
+        UserDto userDto = userService.createUser(
+                request.getUserId(),
+                request.getUserName(),
+                request.getPhoneNumber()
+
         );
 
         return ResponseEntity.ok().body(
-                CreateUser.Response.fromDto(partner));
+                CreateUser.Response.fromDto(userDto));
     }
 
 

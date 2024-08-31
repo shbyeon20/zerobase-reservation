@@ -2,20 +2,20 @@
 
  /* partner_entity 초기데이터*/
 
- INSERT INTO partner_entity (id, partner_id, partner_name, business_id, registered_at)
-VALUES (1, 'partner1', 'james', 1234567890, '2023-01-01 10:00:00');
+ INSERT INTO partner_entity (id, partner_id, partner_name, business_id, phone_number, registered_at)
+ VALUES (1, 'partner1', 'james', '1234567890', '01012345678', '2023-01-01 10:00:00');
 
-INSERT INTO partner_entity (id, partner_id, partner_name, business_id, registered_at)
-VALUES (2, 'partner2', 'john', 2345678901, '2023-01-02 11:00:00');
+ INSERT INTO partner_entity (id, partner_id, partner_name, business_id, phone_number, registered_at)
+ VALUES (2, 'partner2', 'john', '2345678901', '01023456789', '2023-01-02 11:00:00');
 
-INSERT INTO partner_entity (id, partner_id, partner_name, business_id, registered_at)
-VALUES (3, 'partner3', 'michel', 3456789012, '2023-01-03 12:00:00');
+ INSERT INTO partner_entity (id, partner_id, partner_name, business_id, phone_number, registered_at)
+ VALUES (3, 'partner3', 'michel', '3456789012', '01034567890', '2023-01-03 12:00:00');
 
-INSERT INTO partner_entity (id, partner_id, partner_name, business_id, registered_at)
-VALUES (4, 'partner4', 'jacob', 4567890123, '2023-01-04 13:00:00');
+ INSERT INTO partner_entity (id, partner_id, partner_name, business_id, phone_number, registered_at)
+ VALUES (4, 'partner4', 'jacob', '4567890123', '01045678901', '2023-01-04 13:00:00');
 
-INSERT INTO partner_entity (id, partner_id, partner_name, business_id, registered_at)
-VALUES (5, 'partner5', 'samuel', 5678901234, '2023-01-05 14:00:00');
+ INSERT INTO partner_entity (id, partner_id, partner_name, business_id, phone_number, registered_at)
+ VALUES (5, 'partner5', 'samuel', '5678901234', '01056789012', '2023-01-05 14:00:00');
 
 
 /* store_entity 초기데이터*/

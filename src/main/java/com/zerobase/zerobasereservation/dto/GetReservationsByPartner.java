@@ -1,30 +1,26 @@
 package com.zerobase.zerobasereservation.dto;
 
 
-import jakarta.validation.constraints.NotNull;
+import com.zerobase.zerobasereservation.type.ReservationStatus;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 
-public class CreateStore {
+
+public class GetReservationsByPartner {
 
 
     @Getter @Setter
     @AllArgsConstructor
     public static class Request {
-
         @Size(min=1,max=10)
         private String partnerId;
         @Size(min=1,max=10)
         private String storeId;
-
-        @NotNull
-        private String address;
-        private String storeComment;
-
 
     }
 
@@ -33,18 +29,17 @@ public class CreateStore {
     @Builder
     @AllArgsConstructor
     public static class Response {
-        private String partnerId;
+        private String reservationId;
         private String storeId;
-        private String address;
-        private String storeComment;
+        private LocalDateTime reservationTime;
+        private ReservationStatus status;
 
-
-        public static Response fromDto(StoreDto storeDto) {
+        public static Response fromDto(ReservationDto reservationDto) {
             return Response.builder()
-                    .partnerId(storeDto.getPartnerId())
-                    .storeId(storeDto.getStoreId())
-                    .address(storeDto.getAddress())
-                    .storeComment(storeDto.getStoreComment())
+                    .reservationId(reservationDto.getReservationId())
+                    .storeId(reservationDto.getStoreId())
+                    .reservationTime(reservationDto.getReservationTime())
+                    .status(reservationDto.getStatus())
                     .build();
         }
     }

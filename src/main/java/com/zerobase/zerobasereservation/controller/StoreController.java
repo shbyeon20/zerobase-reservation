@@ -4,7 +4,6 @@ import com.zerobase.zerobasereservation.dto.CreateStore;
 import com.zerobase.zerobasereservation.dto.StoreDto;
 import com.zerobase.zerobasereservation.service.StoreService;
 import jakarta.validation.Valid;
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +23,7 @@ public class StoreController {
     @PostMapping("/stores")
     public ResponseEntity<CreateStore.Response> createPartner(
             @RequestBody @Valid CreateStore.Request request) {
-        log.info("Creating store : {}", request);
+        log.info("Post controller start  for  store creation : "+ request.getPartnerId());
 
         StoreDto store = storeService.createStore(
                 request.getPartnerId(),

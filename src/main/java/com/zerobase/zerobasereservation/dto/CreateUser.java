@@ -1,8 +1,7 @@
 package com.zerobase.zerobasereservation.dto;
 
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,11 +16,14 @@ public class CreateUser {
     @AllArgsConstructor
     public static class Request {
         @Size(min=1,max=10)
-        private String partnerId;
+        private String userId;
         @Size(min=1,max=10)
-        private String partnerName;
-        @Min(1000000000) @Max(9999999999L)
-        private Long businessId;
+        private String userName;
+
+        @Pattern(regexp = "^010\\d{8}$", message = "Phone number must start with 010 and be followed by 8 digits.")
+        private String phoneNumber;
+
+        private Long registeredAt;
 
     }
 
@@ -30,13 +32,13 @@ public class CreateUser {
     @Builder
     @AllArgsConstructor
     public static class Response {
-        private String partnerId;
-        private String partnerName;
+        private String userId;
+        private String userName;
 
         public static Response fromDto(UserDto userDto) {
             return Response.builder()
-                    .partnerId(userDto.getPartnerId())
-                    .partnerName(userDto.getPartnerName())
+                    .userId(userDto.getUserId())
+                    .userName(userDto.getUserName())
                     .build();
         }
     }

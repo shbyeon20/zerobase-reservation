@@ -15,6 +15,7 @@ public class StoreEntity {
     @Id
     @GeneratedValue
     private Long id;
+
     @ManyToOne
     @JoinColumn(name = "partnerId", referencedColumnName = "partnerId",
             nullable = false)

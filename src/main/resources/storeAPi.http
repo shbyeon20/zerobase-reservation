@@ -3,10 +3,11 @@ POST http://localhost:8080/stores
 Content-Type: application/json
 
 {
-  "partnerId": "partner1",
+  "partnerId": "bsh6226",
   "storeId" : "투썸플레이스동대문",
   "address": "서울시동대문구용두동",
   "storeComment" : "청결한 매장"
+
 }
 
 ### Send POST request with json body
@@ -14,7 +15,7 @@ POST http://localhost:8080/stores
 Content-Type: application/json
 
 {
-  "partnerId": "partner1",
+  "partnerId": "jjh6226",
   "storeId" : "스타벅스동대문",
   "address": "서울시동대문구용두동",
   "storeComment" : "청결한 매장"
