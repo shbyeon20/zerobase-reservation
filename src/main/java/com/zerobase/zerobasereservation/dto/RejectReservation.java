@@ -9,7 +9,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 
-public class ConfirmReservation {
+public class RejectReservation {
 
     @Getter @Setter
     @AllArgsConstructor

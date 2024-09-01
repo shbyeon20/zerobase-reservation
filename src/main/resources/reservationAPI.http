@@ -17,3 +17,32 @@ Content-Type: application/json
   "storeId" : "스타벅스동대문",
   "reservationTime": "2024-09-02T14:00"
 }
+
+
+
+### Send POST request with json body
+POST http://localhost:8080/reservations/listbypartner
+Content-Type: application/json
+
+{
+  "partnerId": "bsh6226",
+  "storeId": "스타벅스동대문"
+}
+
+
+### Send POST request with json body
+POST http://localhost:8080/reservations/listbyuser
+Content-Type: application/json
+
+{
+  "userId" : "alexander1",
+  "storeId" : "스타벅스동대문"
+}
+
+### Send Patch request with json body
+PATCH http://localhost:8080/reservations/confirm
+Content-Type: application/json
+
+{
+  "reservationId" : "00KoHfSn"
+}

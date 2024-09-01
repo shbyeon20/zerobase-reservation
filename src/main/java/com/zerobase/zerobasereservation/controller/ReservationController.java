@@ -2,21 +2,21 @@ package com.zerobase.zerobasereservation.controller;
 
 import com.zerobase.zerobasereservation.dto.*;
 import com.zerobase.zerobasereservation.service.ReservationService;
-import com.zerobase.zerobasereservation.service.StoreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-
 public class ReservationController {
-    private final StoreService storeService;
     private final ReservationService reservationService;
 
     //todo : validation에 관련 Exception handling 처리할것
@@ -66,26 +66,51 @@ public class ReservationController {
 
         List<ReservationDto> reservationDtos =
                 reservationService.getReservationsByUser(request.getUserId(), request.getStoreId());
+        System.out.println(reservationDtos.toString());
 
         return ResponseEntity.ok(
                 reservationDtos.stream().map(GetReservationsByUser.Response::fromDto).toList());
 
     }
 
-    // 사용자가 매장에 방문하여 키오스크를 통해 예약 Id를 조회하여 reserved 상태에서 confirmed상태로 변경함
+
+
+    // 용례1 : 사용자가 매장에 방문하여 키오스크를 통해 예약 Id를 조회하여 reserved 상태에서 confirmed상태로 변경함
 
     @PatchMapping("/reservations/confirm")
     public ResponseEntity<ConfirmReservation.Response> confirmReservation(
-            @RequestBody @Valid ConfirmReservation.Request request){
-        log.info("Patch controller start for updating reservation " +
+            @RequestBody @Valid  ConfirmReservation.Request request){
+        log.info("Patch controller start for confirming reservation status " +
                 "using resrvationId : "+request.getReservationId());
 
 
         ReservationDto reservationDto =
-                reservationService.updateReservationsStatus(request.getReservationId());
+                reservationService.confirmReservation(
+                        request.getReservationId()
+                        );
 
         return ResponseEntity.ok(ConfirmReservation.Response.fromDto(reservationDto));
 
     }
+
+    // 용례2 : 매장주인이 reserved 상태인 예약을 예약을 거절할때 rejected상태로 변경함
+
+    @PatchMapping("/reservations/reject")
+    public ResponseEntity<RejectReservation.Response> confirmReservation(
+            @RequestBody @Valid  RejectReservation.Request request){
+        log.info("Patch controller start for rejecting reservation status " +
+                "using resrvationId : "+request.getReservationId());
+
+
+        ReservationDto reservationDto =
+                reservationService.rejectReservation(
+                        request.getReservationId()
+                );
+
+        return ResponseEntity.ok(RejectReservation.Response.fromDto(reservationDto));
+
+    }
+
+
 
 }

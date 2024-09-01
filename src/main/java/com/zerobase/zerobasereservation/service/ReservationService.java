@@ -64,7 +64,7 @@ public class ReservationService {
                                                       String storeId) {
         log.info("Retrieving reservations for user {} and store {}", userId, storeId);
         List<ReservationEntity> reservationEntities =
-                reservationRepository.findAllByUserIdAndStoreIdOrderByReservationTime(userId, storeId);
+                reservationRepository.findAllByUserEntity_UserIdAndStoreEntity_StoreIdOrderByReservationTime(userId, storeId);
 
         return reservationEntities.stream().map(ReservationDto::fromEntity).toList();
 
@@ -75,25 +75,56 @@ public class ReservationService {
         log.info("Retrieving reservations for partner {}", storeId);
 
         List<ReservationEntity> reservationEntities =
-                reservationRepository.findAllByStoreIdOrderByReservationTime(storeId);
+                reservationRepository.findAllByStoreEntity_StoreIdOrderByReservationTime(storeId);
 
         return reservationEntities.stream().map(ReservationDto::fromEntity).toList();
 
     }
 
-    public ReservationDto updateReservationsStatus(String reservationId) {
+    public ReservationDto confirmReservation(String reservationId) {
 
-        log.info("Updating reservation status for reservation {}", reservationId);
-        ReservationEntity reservationToConfirm =
+        log.info("Confirming reservation status for reservation {}",
+                reservationId);
+
+        ReservationEntity reservationEntity =
         reservationRepository.findByReservationId(reservationId).orElseThrow
                 (() -> new ReservationException(ErrorCode.RESERVATION_ID_NONEXISTENT
                         ,"올바르지 않은 RESERVATION ID입니다"));
 
-        reservationToConfirm.setReservationStatus(ReservationStatus.CONFIRMED);
+        if(!reservationEntity.getReservationStatus().equals(ReservationStatus.RESERVED)) {
+            throw new ReservationException(ErrorCode.RESERVATION_STATUS_ERROR
+                    ,"RESERVED상태의 Reservation이 아닙니다");
+        }
+
+        reservationEntity.setReservationStatus(ReservationStatus.CONFIRMED);
 
         log.info("Updating reservation status confirmed for reservation {}", reservationId);
 
-        return ReservationDto.fromEntity(reservationRepository.save(reservationToConfirm));
+        return ReservationDto.fromEntity(reservationRepository.save(reservationEntity));
+
+
+    }
+
+    public ReservationDto rejectReservation(String reservationId) {
+
+        log.info("Rejecting reservation status for reservation {}",
+                reservationId);
+
+        ReservationEntity reservationEntity =
+                reservationRepository.findByReservationId(reservationId).orElseThrow
+                        (() -> new ReservationException(ErrorCode.RESERVATION_ID_NONEXISTENT
+                                ,"올바르지 않은 RESERVATION ID입니다"));
+
+        if(!reservationEntity.getReservationStatus().equals(ReservationStatus.RESERVED)) {
+            throw new ReservationException(ErrorCode.RESERVATION_STATUS_ERROR
+                    ,"RESERVED상태의 Reservation이 아닙니다");
+        }
+
+        reservationEntity.setReservationStatus(ReservationStatus.REJECTED);
+
+        log.info("Updating reservation status confirmed for reservation {}", reservationId);
+
+        return ReservationDto.fromEntity(reservationRepository.save(reservationEntity));
 
 
     }
