@@ -1,7 +1,7 @@
 package com.zerobase.zerobasereservation.entity;
 
 
-import com.zerobase.zerobasereservation.type.ReservationStatus;
+import com.zerobase.zerobasereservation.type.ReviewStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,22 +13,30 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReservationEntity {
+public class ReviewEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
-    String reservationId;
+    String reviewID;
+    @OneToOne
+    ReservationEntity reservationEntity;
     @ManyToOne
     @JoinColumn(name = "userId", referencedColumnName = "userId",
             nullable = false)
     UserEntity userEntity;
+
     @ManyToOne
-    @JoinColumn(name = "storeID", referencedColumnName = "storeID",
+    @JoinColumn(name = "storeId", referencedColumnName = "storeId",
             nullable = false)
     StoreEntity storeEntity;
-    ReservationStatus reservationStatus;
-    LocalDateTime reservationTime;
+
+    Integer rating;
+
+    String reviewContents;
+    @Enumerated(EnumType.STRING)
+    ReviewStatus reviewStatus;
     LocalDateTime createdAt;
     LocalDateTime updatedAt;
+
 
 }

@@ -25,7 +25,7 @@ public class ReservationController {
     // 최초로 reservation을 생성함
 
     @PostMapping("/reservations")
-    public ResponseEntity<CreateReservation.Response> createPartner(
+    public ResponseEntity<CreateReservation.Response> createReservation(
             @RequestBody @Valid CreateReservation.Request request) {
         log.info("Post controller start  for  store creation : "+ request.getUserId());
 
@@ -96,7 +96,7 @@ public class ReservationController {
     // 용례2 : 매장주인이 reserved 상태인 예약을 예약을 거절할때 rejected상태로 변경함
 
     @PatchMapping("/reservations/reject")
-    public ResponseEntity<RejectReservation.Response> confirmReservation(
+    public ResponseEntity<RejectReservation.Response> rejectReservation(
             @RequestBody @Valid  RejectReservation.Request request){
         log.info("Patch controller start for rejecting reservation status " +
                 "using resrvationId : "+request.getReservationId());

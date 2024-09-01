@@ -86,21 +86,21 @@ public class ReservationService {
         log.info("Confirming reservation status for reservation {}",
                 reservationId);
 
-        ReservationEntity reservationEntity =
+        ReservationEntity reservationToConfirm =
         reservationRepository.findByReservationId(reservationId).orElseThrow
                 (() -> new ReservationException(ErrorCode.RESERVATION_ID_NONEXISTENT
                         ,"올바르지 않은 RESERVATION ID입니다"));
 
-        if(!reservationEntity.getReservationStatus().equals(ReservationStatus.RESERVED)) {
+        if(!reservationToConfirm.getReservationStatus().equals(ReservationStatus.RESERVED)) {
             throw new ReservationException(ErrorCode.RESERVATION_STATUS_ERROR
                     ,"RESERVED상태의 Reservation이 아닙니다");
         }
 
-        reservationEntity.setReservationStatus(ReservationStatus.CONFIRMED);
+        reservationToConfirm.setReservationStatus(ReservationStatus.CONFIRMED);
 
         log.info("Updating reservation status confirmed for reservation {}", reservationId);
 
-        return ReservationDto.fromEntity(reservationRepository.save(reservationEntity));
+        return ReservationDto.fromEntity(reservationRepository.save(reservationToConfirm));
 
 
     }
@@ -110,21 +110,21 @@ public class ReservationService {
         log.info("Rejecting reservation status for reservation {}",
                 reservationId);
 
-        ReservationEntity reservationEntity =
+        ReservationEntity reservationToConfirm =
                 reservationRepository.findByReservationId(reservationId).orElseThrow
                         (() -> new ReservationException(ErrorCode.RESERVATION_ID_NONEXISTENT
                                 ,"올바르지 않은 RESERVATION ID입니다"));
 
-        if(!reservationEntity.getReservationStatus().equals(ReservationStatus.RESERVED)) {
+        if(!reservationToConfirm.getReservationStatus().equals(ReservationStatus.RESERVED)) {
             throw new ReservationException(ErrorCode.RESERVATION_STATUS_ERROR
                     ,"RESERVED상태의 Reservation이 아닙니다");
         }
 
-        reservationEntity.setReservationStatus(ReservationStatus.REJECTED);
+        reservationToConfirm.setReservationStatus(ReservationStatus.REJECTED);
 
         log.info("Updating reservation status confirmed for reservation {}", reservationId);
 
-        return ReservationDto.fromEntity(reservationRepository.save(reservationEntity));
+        return ReservationDto.fromEntity(reservationRepository.save(reservationToConfirm));
 
 
     }
