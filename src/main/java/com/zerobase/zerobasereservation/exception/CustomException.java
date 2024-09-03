@@ -8,7 +8,12 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class StoreException extends RuntimeException {
+public class CustomException extends RuntimeException {
     ErrorCode errorCode;
     String message;
+
+    public CustomException(ErrorCode errorCode) {
+        this.errorCode = errorCode;
+        this.message = errorCode.getMessage();
+    }
 }

@@ -1,5 +1,6 @@
 package com.zerobase.zerobasereservation.dto;
 
+import com.zerobase.zerobasereservation.type.ReviewStatus;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,12 +24,12 @@ public class DeleteReview {
     @AllArgsConstructor
     public static class Response {
         private String reviewId;
-        private String status;
+        private ReviewStatus status;
 
-        public static Response success(String reviewId) {
+        public static Response fromDTO(ReviewDto reviewDto) {
             return Response.builder()
-                    .reviewId(reviewId)
-                    .status("Deleted successfully")
+                    .reviewId(reviewDto.reviewId)
+                    .status(reviewDto.getStatus())
                     .build();
         }
     }

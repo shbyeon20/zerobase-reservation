@@ -5,12 +5,9 @@ import com.zerobase.zerobasereservation.entity.ReservationEntity;
 import com.zerobase.zerobasereservation.entity.ReviewEntity;
 import com.zerobase.zerobasereservation.entity.StoreEntity;
 import com.zerobase.zerobasereservation.entity.UserEntity;
-import com.zerobase.zerobasereservation.exception.ReservationException;
-import com.zerobase.zerobasereservation.exception.ReviewException;
-import com.zerobase.zerobasereservation.exception.UserException;
+import com.zerobase.zerobasereservation.exception.CustomException;
 import com.zerobase.zerobasereservation.repository.ReservationRepository;
 import com.zerobase.zerobasereservation.repository.ReviewRepository;
-import com.zerobase.zerobasereservation.repository.StoreRepository;
 import com.zerobase.zerobasereservation.repository.UserRepository;
 import com.zerobase.zerobasereservation.type.ErrorCode;
 import com.zerobase.zerobasereservation.type.ReviewStatus;
@@ -29,7 +26,6 @@ import java.util.UUID;
 public class ReviewService {
 
     private final ReservationRepository reservationRepository;
-    private final StoreRepository storeRepository;
     private final UserRepository userRepository;
     private final ReviewRepository reviewRepository;
 
@@ -37,11 +33,11 @@ public class ReviewService {
         log.info("Creating review for user {} and reservation {}", userId, reservationId);
 
         ReservationEntity reservationEntity = reservationRepository.findByReservationId(reservationId).orElseThrow(
-                () -> new ReservationException(ErrorCode.RESERVATION_ID_NONEXISTENT, "Reservation ID not existing: " + reservationId)
+                () -> new CustomException(ErrorCode.RESERVATION_ID_NONEXISTENT)
         );
 
         UserEntity userEntity = userRepository.findByuserId(userId).orElseThrow(
-                () -> new UserException(ErrorCode.USER_ID_NONEXISTENT, "User ID not existing: " + userId)
+                () -> new CustomException(ErrorCode.USER_ID_NONEXISTENT)
         );
 
         StoreEntity storeEntity = reservationEntity.getStoreEntity();
@@ -64,7 +60,7 @@ public class ReviewService {
         log.info("Updating review for reviewId: {}", reviewId);
 
         ReviewEntity reviewEntity = reviewRepository.findByReviewID(reviewId).orElseThrow(
-                () -> new ReviewException(ErrorCode.REVIEW_NOT_FOUND, "Review ID not found: " + reviewId)
+                () -> new CustomException(ErrorCode.REVIEW_NOT_FOUND)
         );
 
         reviewEntity.setRating(rating);
@@ -80,7 +76,7 @@ public class ReviewService {
         log.info("Setting review status to DELETED for reviewId: {}", reviewId);
 
         ReviewEntity reviewEntity = reviewRepository.findByReviewID(reviewId).orElseThrow(
-                () -> new ReviewException(ErrorCode.REVIEW_NOT_FOUND, "Review ID not found: " + reviewId)
+                () -> new CustomException(ErrorCode.REVIEW_NOT_FOUND)
         );
 
         reviewEntity.setReviewStatus(ReviewStatus.DELETED);

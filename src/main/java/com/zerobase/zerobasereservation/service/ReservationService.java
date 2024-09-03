@@ -4,9 +4,7 @@ import com.zerobase.zerobasereservation.dto.ReservationDto;
 import com.zerobase.zerobasereservation.entity.ReservationEntity;
 import com.zerobase.zerobasereservation.entity.StoreEntity;
 import com.zerobase.zerobasereservation.entity.UserEntity;
-import com.zerobase.zerobasereservation.exception.ReservationException;
-import com.zerobase.zerobasereservation.exception.StoreException;
-import com.zerobase.zerobasereservation.exception.UserException;
+import com.zerobase.zerobasereservation.exception.CustomException;
 import com.zerobase.zerobasereservation.repository.ReservationRepository;
 import com.zerobase.zerobasereservation.repository.StoreRepository;
 import com.zerobase.zerobasereservation.repository.UserRepository;
@@ -38,12 +36,12 @@ public class ReservationService {
 
         UserEntity userEntity =
                 userRepository.findByuserId(userId).orElseThrow
-                        (() -> new UserException(ErrorCode.USER_ID_NONEXISTENT,
+                        (() -> new CustomException(ErrorCode.USER_ID_NONEXISTENT,
                                 "partnerId not existing : " + userId));
 
         StoreEntity storeEntity =
                 storeRepository.findBystoreId(storeId).orElseThrow
-                        (() -> new StoreException(ErrorCode.STORE_ID_NONEXISTENT
+                        (() -> new CustomException(ErrorCode.STORE_ID_NONEXISTENT
                                 , "partnerId not existing : " + storeId));
 
 
@@ -88,12 +86,11 @@ public class ReservationService {
 
         ReservationEntity reservationToConfirm =
         reservationRepository.findByReservationId(reservationId).orElseThrow
-                (() -> new ReservationException(ErrorCode.RESERVATION_ID_NONEXISTENT
-                        ,"올바르지 않은 RESERVATION ID입니다"));
+                (() -> new CustomException(ErrorCode.RESERVATION_ID_NONEXISTENT));
+
 
         if(!reservationToConfirm.getReservationStatus().equals(ReservationStatus.RESERVED)) {
-            throw new ReservationException(ErrorCode.RESERVATION_STATUS_ERROR
-                    ,"RESERVED상태의 Reservation이 아닙니다");
+            throw new CustomException(ErrorCode.RESERVATION_STATUS_ERROR);
         }
 
         reservationToConfirm.setReservationStatus(ReservationStatus.CONFIRMED);
@@ -112,12 +109,10 @@ public class ReservationService {
 
         ReservationEntity reservationToConfirm =
                 reservationRepository.findByReservationId(reservationId).orElseThrow
-                        (() -> new ReservationException(ErrorCode.RESERVATION_ID_NONEXISTENT
-                                ,"올바르지 않은 RESERVATION ID입니다"));
+                        (() -> new CustomException(ErrorCode.RESERVATION_ID_NONEXISTENT));
 
         if(!reservationToConfirm.getReservationStatus().equals(ReservationStatus.RESERVED)) {
-            throw new ReservationException(ErrorCode.RESERVATION_STATUS_ERROR
-                    ,"RESERVED상태의 Reservation이 아닙니다");
+            throw new CustomException(ErrorCode.RESERVATION_STATUS_ERROR);
         }
 
         reservationToConfirm.setReservationStatus(ReservationStatus.REJECTED);
