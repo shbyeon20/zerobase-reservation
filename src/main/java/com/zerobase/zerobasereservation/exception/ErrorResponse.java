@@ -8,11 +8,11 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-@RequiredArgsConstructor
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class ErrorResponse {
+
     public ErrorResponse(ErrorCode errorCode, String message) {
         this.errorCode = errorCode;
         this.message = errorCode.getMessage();

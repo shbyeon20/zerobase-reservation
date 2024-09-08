@@ -23,6 +23,15 @@ spring:
       host: localhost
       port: 6379
 
+  jwt:
+    secret : "c2VlX2hvd19wcm91ZGx5X0lfaGF2ZV9iZWVuX2RvaW5nX3NvX2Zhcgo="
+
 logging:
     level:
       org.springframework: DEBUG
+
+
+      
+      
+      
+      see_how_proudly_I_have_been_doing_so_far

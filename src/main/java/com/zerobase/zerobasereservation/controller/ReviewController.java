@@ -3,7 +3,7 @@ package com.zerobase.zerobasereservation.controller;
 import com.zerobase.zerobasereservation.dto.CreateReview;
 import com.zerobase.zerobasereservation.dto.DeleteReview;
 import com.zerobase.zerobasereservation.dto.ReviewDto;
-import com.zerobase.zerobasereservation.dto.UpdateReview;
+import com.zerobase.zerobasereservation.exception.UpdateReview;
 import com.zerobase.zerobasereservation.service.ReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,8 @@ public class ReviewController {
     //todo : validation에 관련 Exception handling 처리할것
 
 
-    // 최초로 reservation을 생성함
+    // reservation 레코드의 정보를 통해서 review를 생성하고 관계를 형성함.
+    // 리뷰를 생성
 
     @PostMapping("/reviews")
     public ResponseEntity<CreateReview.Response> createReview(

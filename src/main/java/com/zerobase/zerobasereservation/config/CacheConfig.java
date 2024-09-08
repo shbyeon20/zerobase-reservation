@@ -9,7 +9,6 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 
 @RequiredArgsConstructor
-@Configuration
 public class CacheConfig {
 
     @Value("${data.redis.host}")
@@ -18,7 +17,6 @@ public class CacheConfig {
     @Value("${spring.data.redis.port}")
     private int port;
 
-    @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         RedisStandaloneConfiguration conf =
                 new RedisStandaloneConfiguration(host, port);

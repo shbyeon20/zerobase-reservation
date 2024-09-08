@@ -8,6 +8,7 @@ import com.zerobase.zerobasereservation.entity.UserEntity;
 import com.zerobase.zerobasereservation.exception.CustomException;
 import com.zerobase.zerobasereservation.repository.ReservationRepository;
 import com.zerobase.zerobasereservation.repository.ReviewRepository;
+import com.zerobase.zerobasereservation.repository.StoreRepository;
 import com.zerobase.zerobasereservation.repository.UserRepository;
 import com.zerobase.zerobasereservation.type.ErrorCode;
 import com.zerobase.zerobasereservation.type.ReviewStatus;
@@ -28,7 +29,13 @@ public class ReviewService {
     private final ReservationRepository reservationRepository;
     private final UserRepository userRepository;
     private final ReviewRepository reviewRepository;
+    private final StoreService storeService;
 
+
+    /*
+    review의 필요정보를 받아서 review 생성하기,
+    그 후 review의 store의 rating도 같이 업데이트 하기
+     */
     public ReviewDto createReview(String userId, Integer rating, String reservationId, String reviewContents) {
         log.info("Creating review for user {} and reservation {}", userId, reservationId);
 
@@ -53,8 +60,17 @@ public class ReviewService {
                 .createdAt(LocalDateTime.now())
                 .build());
 
+        // Update the store's rating after the review CRUD
+        storeService.updateRating(storeEntity);
+
         return ReviewDto.FromEntity(reviewEntity);
     }
+
+
+    /*
+    review의 필요정보를 받아서 review 수정하기,
+    그 후 review의 store의 rating도 같이 업데이트 하기
+     */
 
     public ReviewDto updateReview(String reviewId, Integer rating, String reviewContents) {
         log.info("Updating review for reviewId: {}", reviewId);
@@ -68,9 +84,18 @@ public class ReviewService {
         reviewEntity.setUpdatedAt(LocalDateTime.now());
 
 
+        // Update the store's rating after the review CRUD
+        storeService.updateRating(reviewEntity.getStoreEntity());
 
         return ReviewDto.FromEntity(reviewRepository.save(reviewEntity));
+
     }
+
+    /*
+    reviw 삭제하기
+    그 후 review의 store의 rating도 같이 업데이트 하기
+     */
+
 
     public ReviewDto deleteReview(String reviewId) {
         log.info("Setting review status to DELETED for reviewId: {}", reviewId);
@@ -81,6 +106,9 @@ public class ReviewService {
 
         reviewEntity.setReviewStatus(ReviewStatus.DELETED);
         reviewEntity.setUpdatedAt(LocalDateTime.now());
+
+        // Update the store's rating after the review CRUD
+        storeService.updateRating(reviewEntity.getStoreEntity());
 
         return ReviewDto.FromEntity(reviewRepository.save(reviewEntity));
     }

@@ -12,7 +12,8 @@ public enum ErrorCode {
     RESERVATION_ID_NONEXISTENT("존재하지 않는 resservationId입니다"),
     RESERVATION_STATUS_ERROR(" Reservation의 상태가 올바르지 않습니다"),
     REVIEW_NOT_FOUND("존재하지 않는 reviewId입니다"),
-    GENERAL_ERROR("dd");
+    GENERAL_ERROR("dd"),
+    PASSWORD_UNMATCHED("비밀번호가 일치하지 않습니다");
 
     private final String message;
 

@@ -18,7 +18,10 @@ import java.util.List;
 public class StoreController {
     private final StoreService storeService;
 
-    //todo : validation에 관련 Exception handling 처리할것
+
+    /*
+     partner로부터 store 정보를 입력받아서 store record를 생성할것
+     */
 
     @PostMapping("/stores")
     public ResponseEntity<CreateStore.Response> createPartner(
@@ -35,6 +38,9 @@ public class StoreController {
         return ResponseEntity.ok(CreateStore.Response.fromDto(store));
     }
 
+    /*
+    파트너ID로 등록된 매장의 리스트를 파트너가 조회하는 기능
+     */
     @GetMapping("/stores/partnerId/{partnerId}")
     public ResponseEntity<List<StoreDto>> findByPartnerId(
             @PathVariable String partnerId)
@@ -42,6 +48,10 @@ public class StoreController {
         log.info("Get Controller start for store Info using partnerId :" +partnerId);
         return ResponseEntity.ok(storeService.findByPartnerId(partnerId));
     }
+
+    /*
+    스토어ID로 등록된 매장의 정보를 사용자가 조회하는 기능
+     */
 
     @GetMapping("/stores/storeId/{storeId}")
     public ResponseEntity<StoreDto> findByStoreId(
