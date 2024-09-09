@@ -17,7 +17,7 @@ public class MemberAuthService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JWTHandler JWTHandler;
+    private final JwtHandler JWTHandler;
 
 
 
@@ -57,7 +57,7 @@ public class MemberAuthService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+        return memberRepository.findByMemberId(username).orElseThrow(() -> new UsernameNotFoundException("Member does not exist"));
     }
 
 

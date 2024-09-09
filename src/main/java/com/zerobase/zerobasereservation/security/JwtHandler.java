@@ -6,6 +6,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,7 +21,8 @@ import java.util.Date;
 
 @Component
 @RequiredArgsConstructor
-public class JWTHandler {
+@Slf4j
+public class JwtHandler {
     private static final String KEY_ROLES = "roles";
     private static final Long TIME_TOKEN_EXPIRE_TIME = 1000 * 60 * 60L;//1hour
     private final MemberAuthService memberAuthService;
@@ -33,25 +35,26 @@ public class JWTHandler {
      */
 
     public String generateToken(String username, ROLE role) {
-        Claims claims = Jwts.claims().setSubject(username);
-        claims.put(KEY_ROLES, role);
+        log.info("Generating token for user: " + username + " with role: " + role);
 
-        var now = new Date();
-        var expiredTimes = new Date(now.getTime() + TIME_TOKEN_EXPIRE_TIME);
+        SecretKey SecretKeyObject = new SecretKeySpec(secretKey.getBytes(),
+                SignatureAlgorithm.HS512.getJcaName());
 
-        SecretKey key = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), SignatureAlgorithm.HS512.getJcaName());
-
+        Claims customClaims = Jwts.claims();
+        customClaims.put("ROLE",role);
 
         return Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(expiredTimes)
-                .signWith(key, SignatureAlgorithm.HS512)  // Using SecretKeySpec instead of a raw string
+                .setSubject(username)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(new Date().getTime()+TIME_TOKEN_EXPIRE_TIME))
+                .signWith( SecretKeyObject,SignatureAlgorithm.HS512)
+                .setClaims(customClaims)
                 .compact();
     }
 
 
     public String getUsernameFromToken(String token) {
+        log.info("get username from token : " + token);
         Claims claims = this.parseClaimsFromToken(token);
         return claims.getSubject();
     }
@@ -76,6 +79,11 @@ public class JWTHandler {
     public boolean validateToken(String token) {
         if(!StringUtils.hasText(token)) return false;
 
+        SecretKey key = new SecretKeySpec(secretKey.getBytes(StandardCharsets.UTF_8), SignatureAlgorithm.HS512.getJcaName());
+
+        log.info("Checking if token is valid: " + token);
+        Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+
         Claims claims = this.parseClaimsFromToken(token);
         return claims.getExpiration().before(new Date());
     }
@@ -86,6 +94,7 @@ public class JWTHandler {
 
      */
     public Authentication getJwtAuthentication(String jwt) {
+        log.info("creat authentication through token : " + jwt);
         UserDetails userDetails =
                 memberAuthService.loadUserByUsername(this.getUsernameFromToken(jwt));
         return new UsernamePasswordAuthenticationToken(userDetails,"",
@@ -94,7 +103,4 @@ public class JWTHandler {
     }
 
 }
-
-
-
 
