@@ -1,5 +1,5 @@
 package com.zerobase.zerobasereservation.type;
 
 public enum ReservationStatus {
-    REQUESTED, ACCEPTED, CANCELLED, EXPIRED, REVIEWED,REJECTED
+    REQUESTED, ACCEPTED, CANCELLED, CONFIRMED, EXPIRED, REVIEWED,REJECTED
 }

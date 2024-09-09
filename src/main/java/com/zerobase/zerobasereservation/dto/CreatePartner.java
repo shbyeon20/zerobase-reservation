@@ -15,9 +15,11 @@ public class CreatePartner {
     @Getter @Setter
     @AllArgsConstructor
     public static class Request {
-        @Size(min=1,max=10)
+        @Size(min=3,max=10)
         private String partnerId;
-        @Size(min=1,max=10)
+        @Size(min=3,max=10)
+        private String password;
+        @Size(min=3,max=10)
         private String partnerName;
         @Size(min=10,max=10)
         private String businessId;

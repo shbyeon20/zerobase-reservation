@@ -1,9 +1,8 @@
-package com.zerobase.zerobasereservation.service;
+package com.zerobase.zerobasereservation.security;
 
 import com.zerobase.zerobasereservation.entity.MemberDetails;
 import com.zerobase.zerobasereservation.exception.CustomException;
 import com.zerobase.zerobasereservation.repository.MemberRepository;
-import com.zerobase.zerobasereservation.security.JWTHandler;
 import com.zerobase.zerobasereservation.type.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,16 +20,23 @@ public class MemberAuthService implements UserDetailsService {
     private final JWTHandler JWTHandler;
 
 
+
+    /*
+    유저로부터 Id와 Pw를 받아서 Id중복여부를 확인한 후
+    pw를 encoding하여 db에 저장함
+     */
     public void register(String memberId, String password){
         if(memberRepository.existsByMemberId(memberId)){
             throw new UsernameNotFoundException("Member already exists");
         }
 
         MemberDetails.builder().memberId(memberId).password(passwordEncoder.encode(password)).build();
-
     }
 
-    // daoAuth를 진행하고 JWT를 반환함
+    /*
+       ID와 PW를 기반으로 daoAuth를 진행하고 일치한다면 JWT를 반환함
+     */
+
     public String daoAuth(String memberId, String password){
 
         MemberDetails memberDetails = memberRepository.findByMemberId(memberId).
@@ -40,10 +46,8 @@ public class MemberAuthService implements UserDetailsService {
             throw new CustomException(ErrorCode.PASSWORD_UNMATCHED);
         }
 
-        String jwt = JWTHandler.generateToken(memberDetails.getMemberId(),
+        return JWTHandler.generateToken(memberDetails.getMemberId(),
                 memberDetails.getRole());
-
-        return jwt;
     }
 
 

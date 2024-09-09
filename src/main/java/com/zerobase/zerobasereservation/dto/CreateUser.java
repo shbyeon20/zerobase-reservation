@@ -15,9 +15,11 @@ public class CreateUser {
     @Getter @Setter
     @AllArgsConstructor
     public static class Request {
-        @Size(min=1,max=10)
+        @Size(min=3,max=10)
         private String userId;
-        @Size(min=1,max=10)
+        @Size(min=3,max=10)
+        private String password;
+        @Size(min=3,max=10)
         private String userName;
 
         @Pattern(regexp = "^010\\d{8}$", message = "Phone number must start with 010 and be followed by 8 digits.")

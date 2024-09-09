@@ -1,6 +1,5 @@
 package com.zerobase.zerobasereservation.security;
 
-import com.zerobase.zerobasereservation.service.MemberAuthService;
 import com.zerobase.zerobasereservation.type.ROLE;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -18,7 +17,6 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -29,8 +27,11 @@ public class JWTHandler {
     @Value("${spring.jwt.secret}")
     private String secretKey;
 
-    // DAO Authentication을 진행한 후, entity의 username(principal)과 roles
-    // (authorities)를 JWT에 담아내어 반환한다.
+    /*
+      DAO Authentication 을 진행한 후, entity 의 username(principal)과 roles
+      (authorities)를 JWT 에 담아내어 반환한다.
+     */
+
     public String generateToken(String username, ROLE role) {
         Claims claims = Jwts.claims().setSubject(username);
         claims.put(KEY_ROLES, role);
@@ -69,7 +70,9 @@ public class JWTHandler {
     }
 
 
-    // 토큰이 비어있는지 혹은 토큰이 유효기간에 부합하는지 확인
+    /*
+        토큰이 비어있는지 혹은 토큰이 유효기간에 부합하는지 확인
+     */
     public boolean validateToken(String token) {
         if(!StringUtils.hasText(token)) return false;
 
@@ -78,7 +81,10 @@ public class JWTHandler {
     }
 
 
-    // spring context에 담을 Authentication을 생성함
+    /*
+        spring context 에 담을 Authentication 을 생성함
+
+     */
     public Authentication getJwtAuthentication(String jwt) {
         UserDetails userDetails =
                 memberAuthService.loadUserByUsername(this.getUsernameFromToken(jwt));

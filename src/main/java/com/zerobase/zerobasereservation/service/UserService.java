@@ -3,6 +3,7 @@ package com.zerobase.zerobasereservation.service;
 import com.zerobase.zerobasereservation.dto.UserDto;
 import com.zerobase.zerobasereservation.entity.UserEntity;
 import com.zerobase.zerobasereservation.repository.UserRepository;
+import com.zerobase.zerobasereservation.security.MemberAuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,9 +16,15 @@ import java.time.LocalDateTime;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final MemberAuthService memberAuthService;
 
-    public UserDto createUser(String userId,
+
+    public UserDto createUser(String userId, String password,
                               String userName, String phoneNumber) {
+
+        log.info("Create member with id {}", userId);
+        memberAuthService.register(userId, password);
+
         log.info("createUser service layer started : "+userId);
         UserEntity userEntity = userRepository.save(
                 UserEntity.builder()

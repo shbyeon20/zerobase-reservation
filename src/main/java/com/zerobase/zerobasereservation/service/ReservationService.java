@@ -112,21 +112,21 @@ public class ReservationService {
         log.info("Confirming reservation status for reservation {}",
                 reservationId);
 
-        ReservationEntity reservationToConfirm =
+        ReservationEntity reservation =
         reservationRepository.findByReservationId(reservationId).orElseThrow
                 (() -> new CustomException(ErrorCode.RESERVATION_ID_NONEXISTENT));
 
 
-        if(!reservationToConfirm.getReservationStatus().equals(ReservationStatus.REQUESTED)) {
+        if(!reservation.getReservationStatus().equals(ReservationStatus.REQUESTED)) {
             throw new CustomException(ErrorCode.RESERVATION_STATUS_ERROR);
         }
 
-        reservationToConfirm.setReservationStatus(ReservationStatus.ACCEPTED);
+        reservation.setReservationStatus(ReservationStatus.ACCEPTED);
 
         log.info("Updating reservation status accepted for reservation {}",
                 reservationId);
 
-        return ReservationDto.fromEntity(reservationRepository.save(reservationToConfirm));
+        return ReservationDto.fromEntity(reservationRepository.save(reservation));
 
 
     }
@@ -142,20 +142,20 @@ public class ReservationService {
         log.info("Rejecting reservation status for reservation {}",
                 reservationId);
 
-        ReservationEntity reservationToConfirm =
+        ReservationEntity reservationEntity =
                 reservationRepository.findByReservationId(reservationId).orElseThrow
                         (() -> new CustomException(ErrorCode.RESERVATION_ID_NONEXISTENT));
 
-        if(!reservationToConfirm.getReservationStatus().equals(ReservationStatus.REQUESTED)) {
+        if(!reservationEntity.getReservationStatus().equals(ReservationStatus.REQUESTED)) {
             throw new CustomException(ErrorCode.RESERVATION_STATUS_ERROR);
         }
 
-        reservationToConfirm.setReservationStatus(ReservationStatus.REJECTED);
+        reservationEntity.setReservationStatus(ReservationStatus.REJECTED);
 
         log.info("Updating reservation status rejected for reservation {}",
                 reservationId);
 
-        return ReservationDto.fromEntity(reservationRepository.save(reservationToConfirm));
+        return ReservationDto.fromEntity(reservationRepository.save(reservationEntity));
 
 
     }
@@ -166,23 +166,27 @@ public class ReservationService {
      */
     public ReservationDto confirmReservation(String reservationId) {
 
-        log.info("Rejecting reservation status for reservation {}",
+        log.info("Confirming reservation status for reservation {}",
                 reservationId);
 
-        ReservationEntity reservationToConfirm =
+        ReservationEntity reservationEntity =
                 reservationRepository.findByReservationId(reservationId).orElseThrow
                         (() -> new CustomException(ErrorCode.RESERVATION_ID_NONEXISTENT));
 
-        if(!reservationToConfirm.getReservationStatus().equals(ReservationStatus.REQUESTED)) {
+        if(!reservationEntity.getReservationStatus().equals(ReservationStatus.ACCEPTED)) {
             throw new CustomException(ErrorCode.RESERVATION_STATUS_ERROR);
         }
 
-        reservationToConfirm.setReservationStatus(ReservationStatus.REJECTED);
+        if(LocalDateTime.now().plusMinutes(10).isAfter(reservationEntity.getReservationTime())){
+            throw new CustomException(ErrorCode.CONFIRMATION_TOO_LATE);
+        }
 
-        log.info("Updating reservation status rejected for reservation {}",
+        reservationEntity.setReservationStatus(ReservationStatus.CONFIRMED);
+
+        log.info("Updating reservation status Confirmed for reservation {}",
                 reservationId);
 
-        return ReservationDto.fromEntity(reservationRepository.save(reservationToConfirm));
+        return ReservationDto.fromEntity(reservationRepository.save(reservationEntity));
 
 
 

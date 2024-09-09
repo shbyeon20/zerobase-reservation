@@ -6,14 +6,17 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum ErrorCode {
+    GENERAL_ERROR("올바르지 않은 요청입니다"),
     PARTNER_ID_NONEXISTENT("존재하지 않는 partnerID입니다"),
     STORE_ID_NONEXISTENT("존재하지 않는 storeId입니다"),
     USER_ID_NONEXISTENT("존재하지 않는 userId입니다"),
     RESERVATION_ID_NONEXISTENT("존재하지 않는 resservationId입니다"),
     RESERVATION_STATUS_ERROR(" Reservation의 상태가 올바르지 않습니다"),
     REVIEW_NOT_FOUND("존재하지 않는 reviewId입니다"),
-    GENERAL_ERROR("dd"),
-    PASSWORD_UNMATCHED("비밀번호가 일치하지 않습니다");
+    PASSWORD_UNMATCHED("비밀번호가 일치하지 않습니다"),
+    CONFIRMATION_TOO_LATE("예약확정은 예약시간이 되기 10분 이전까지만 가능합니다");
+
+
 
     private final String message;
 

@@ -105,31 +105,10 @@ public class ReservationController {
 
     }
 
-    /*
-       매장주인이 reserved 상태인 예약을 예약을 거절할때 rejected상태로 변경함
-
-     */
-
-    @PatchMapping("/reservations/user/confirm")
-    public ResponseEntity<UpdateStatusReservation.Response> confirmReservation(
-            @RequestBody @Valid  UpdateStatusReservation.Request request){
-        log.info("Patch controller start for confriming reservation status " +
-                "using resrvationId : "+request.getReservationId());
-
-
-        ReservationDto reservationDto =
-                reservationService.confirmReservation(
-                        request.getReservationId()
-                );
-
-        return ResponseEntity.ok(UpdateStatusReservation.Response.fromDto(reservationDto));
-
-    }
 
 
     /*
-       손님이 키오스크에 방문하여 Accepted 상태인 예약을 승인하여 confiremd상태로 변경함
-
+              매장주인이 reserved 상태인 예약을 예약을 거절할때 rejected상태로 변경함
      */
 
     @PatchMapping("/reservations/reject")
@@ -147,6 +126,29 @@ public class ReservationController {
         return ResponseEntity.ok(UpdateStatusReservation.Response.fromDto(reservationDto));
 
     }
+
+    /*
+       손님이 키오스크에 방문하여 Accepted 상태인 예약을 승인하여 confiremd상태로 변경함
+       단, 10분 이전에 확정을 해야 인정됨
+
+     */
+
+    @PatchMapping("/reservations/user/kiosk/confirm")
+    public ResponseEntity<UpdateStatusReservation.Response> confirmReservation(
+            @RequestBody @Valid  UpdateStatusReservation.Request request){
+        log.info("Patch controller start for confriming reservation status " +
+                "using resrvationId : "+request.getReservationId());
+
+
+        ReservationDto reservationDto =
+                reservationService.confirmReservation(
+                        request.getReservationId()
+                );
+
+        return ResponseEntity.ok(UpdateStatusReservation.Response.fromDto(reservationDto));
+
+    }
+
 
 
 
