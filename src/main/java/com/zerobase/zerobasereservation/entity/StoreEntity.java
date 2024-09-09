@@ -23,7 +23,6 @@ public class StoreEntity {
     @Column(unique = true)
     private String storeId;
     private String address;
-    // storeGeolocation 매장좌표명(향후도입)
     private String storeComment;
     private Double rating;
     private LocalDateTime registeredAt;

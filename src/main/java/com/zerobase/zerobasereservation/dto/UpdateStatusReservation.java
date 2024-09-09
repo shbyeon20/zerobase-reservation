@@ -2,14 +2,13 @@ package com.zerobase.zerobasereservation.dto;
 
 
 import com.zerobase.zerobasereservation.type.ReservationStatus;
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
 
-public class ConfirmReservation {
+public class UpdateStatusReservation {
 
     @Getter @Setter
     @AllArgsConstructor
@@ -17,10 +16,7 @@ public class ConfirmReservation {
     public static class Request {
         @Size(min=1,max=10)
         private String reservationId;
-        @Column(nullable = false)
-        private ReservationStatus statusFrom;
-        @Column(nullable = false)
-        private ReservationStatus statusTo;
+
 
 
     }

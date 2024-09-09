@@ -22,9 +22,12 @@ public class ReservationController {
     //todo : validation에 관련 Exception handling 처리할것
 
 
-    // 최초로 reservation을 생성함
+    /*
+     최초로 user가 reservation을 생성함
+     단, reservation ID는 UUID로 자동생성되어 유저에게 전달되고 예약변경시 확인됨
+     */
 
-    @PostMapping("/reservations")
+    @PostMapping("/reservations/user/create")
     public ResponseEntity<CreateReservation.Response> createReservation(
             @RequestBody @Valid CreateReservation.Request request) {
         log.info("Post controller start  for  store creation : "+ request.getUserId());
@@ -39,9 +42,11 @@ public class ReservationController {
     }
 
 
+    /*
+        생성된 Reservation을 매장점주가 storeId를 통해서 조회를함
 
-    // 생성된 Reservation을 매장점주가 storeId를 통해서 조회를함
-    @PostMapping("/reservations/listbypartner")
+     */
+    @PostMapping("/reservations/partner/list")
     public ResponseEntity<List<GetReservationsByPartner.Response>> getReservationsByUserId(
             @RequestBody @Valid GetReservationsByPartner.Request request){
         log.info("Get controller start for fetching reservation " +
@@ -55,9 +60,12 @@ public class ReservationController {
 
     }
 
-    // 생성된 Reservation을 유저가 userId와 storeId를 통해서 조회를 함
+    /*
+        생성된 Reservation을 유저가 userId와 storeId를 통해서 조회를 함
 
-    @PostMapping("/reservations/listbyuser")
+     */
+
+    @PostMapping("/reservations/user/list")
     public ResponseEntity<List<GetReservationsByUser.Response>> getReservationsByUserId(
             @RequestBody @Valid GetReservationsByUser.Request request){
         log.info("Get controller start for fetching reservation " +
@@ -75,29 +83,58 @@ public class ReservationController {
 
 
 
-    // 용례1 : 사용자가 매장에 방문하여 키오스크를 통해 예약 Id를 조회하여 reserved 상태에서 confirmed상태로 변경함
+    /*
+         매장주인이 예약 Id를 조회하여 reserved 상태에서 accepted상태로 변경함
 
-    @PatchMapping("/reservations/confirm")
-    public ResponseEntity<ConfirmReservation.Response> confirmReservation(
-            @RequestBody @Valid  ConfirmReservation.Request request){
+     */
+
+
+    @PatchMapping("/reservations/partner/accept")
+    public ResponseEntity<UpdateStatusReservation.Response> acceptReservation(
+            @RequestBody @Valid  UpdateStatusReservation.Request request){
         log.info("Patch controller start for confirming reservation status " +
+                "using resrvationId : "+request.getReservationId());
+
+
+        ReservationDto reservationDto =
+                reservationService.acceptReservation(
+                        request.getReservationId()
+                        );
+
+        return ResponseEntity.ok(UpdateStatusReservation.Response.fromDto(reservationDto));
+
+    }
+
+    /*
+       매장주인이 reserved 상태인 예약을 예약을 거절할때 rejected상태로 변경함
+
+     */
+
+    @PatchMapping("/reservations/user/confirm")
+    public ResponseEntity<UpdateStatusReservation.Response> confirmReservation(
+            @RequestBody @Valid  UpdateStatusReservation.Request request){
+        log.info("Patch controller start for confriming reservation status " +
                 "using resrvationId : "+request.getReservationId());
 
 
         ReservationDto reservationDto =
                 reservationService.confirmReservation(
                         request.getReservationId()
-                        );
+                );
 
-        return ResponseEntity.ok(ConfirmReservation.Response.fromDto(reservationDto));
+        return ResponseEntity.ok(UpdateStatusReservation.Response.fromDto(reservationDto));
 
     }
 
-    // 용례2 : 매장주인이 reserved 상태인 예약을 예약을 거절할때 rejected상태로 변경함
+
+    /*
+       손님이 키오스크에 방문하여 Accepted 상태인 예약을 승인하여 confiremd상태로 변경함
+
+     */
 
     @PatchMapping("/reservations/reject")
-    public ResponseEntity<RejectReservation.Response> rejectReservation(
-            @RequestBody @Valid  RejectReservation.Request request){
+    public ResponseEntity<UpdateStatusReservation.Response> rejectReservation(
+            @RequestBody @Valid  UpdateStatusReservation.Request request){
         log.info("Patch controller start for rejecting reservation status " +
                 "using resrvationId : "+request.getReservationId());
 
@@ -107,7 +144,7 @@ public class ReservationController {
                         request.getReservationId()
                 );
 
-        return ResponseEntity.ok(RejectReservation.Response.fromDto(reservationDto));
+        return ResponseEntity.ok(UpdateStatusReservation.Response.fromDto(reservationDto));
 
     }
 
