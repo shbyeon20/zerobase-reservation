@@ -136,7 +136,7 @@ public class ReservationController {
     public ResponseEntity<UpdateStatusReservation.Response> rejectReservation(
             @RequestBody @Valid  UpdateStatusReservation.Request request){
         log.info("Patch controller start for rejecting reservation status " +
-                "using resrvationId : "+request.getReservationId());
+                "using resrvationId : "+ request.getReservationId());
 
 
         ReservationDto reservationDto =
