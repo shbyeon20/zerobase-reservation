@@ -26,6 +26,7 @@ public class JwtHandler {
     private static final String KEY_ROLES = "roles";
     private static final Long TIME_TOKEN_EXPIRE_TIME = 1000 * 60 * 60L;//1hour
     private final MemberAuthService memberAuthService;
+
     @Value("${spring.jwt.secret}")
     private String secretKey;
 
@@ -90,17 +91,21 @@ public class JwtHandler {
 
 
     /*
-        spring context 에 담을 Authentication 을 생성함
+       spring context 에 담을 Authentication 을 생성함
+    */
 
-     */
     public Authentication getJwtAuthentication(String jwt) {
         log.info("creat authentication through token : " + jwt);
         UserDetails userDetails =
                 memberAuthService.loadUserByUsername(this.getUsernameFromToken(jwt));
         return new UsernamePasswordAuthenticationToken(userDetails,"",
                 userDetails.getAuthorities());
-
     }
+
+
+
+
+
 
 }
 

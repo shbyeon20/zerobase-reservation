@@ -5,19 +5,24 @@ import com.zerobase.zerobasereservation.exception.CustomException;
 import com.zerobase.zerobasereservation.repository.MemberRepository;
 import com.zerobase.zerobasereservation.type.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
+
 public class MemberAuthService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtHandler JWTHandler;
+    private final JwtHandler jwtHandler;
+
 
 
 
@@ -25,6 +30,7 @@ public class MemberAuthService implements UserDetailsService {
     유저로부터 Id와 Pw를 받아서 Id중복여부를 확인한 후
     pw를 encoding하여 db에 저장함
      */
+    @Transactional
     public void register(String memberId, String password){
         if(memberRepository.existsByMemberId(memberId)){
             throw new UsernameNotFoundException("Member already exists");
@@ -46,7 +52,7 @@ public class MemberAuthService implements UserDetailsService {
             throw new CustomException(ErrorCode.PASSWORD_UNMATCHED);
         }
 
-        return JWTHandler.generateToken(memberDetails.getMemberId(),
+        return jwtHandler.generateToken(memberDetails.getMemberId(),
                 memberDetails.getRole());
     }
 
@@ -56,9 +62,10 @@ public class MemberAuthService implements UserDetailsService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public  UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return memberRepository.findByMemberId(username).orElseThrow(() -> new UsernameNotFoundException("Member does not exist"));
     }
+
 
 
 }
