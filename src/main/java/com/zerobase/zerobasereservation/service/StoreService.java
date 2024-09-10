@@ -78,7 +78,7 @@ public class StoreService {
     public void updateRating(StoreEntity storeEntity) {
         log.info("update rating using storeID :"+storeEntity.getStoreId());
 
-        Double rating = reviewRepository.findAverageRatingByStoreEntity(storeEntity);
+        Double rating = reviewRepository.reupdateAverageRating(storeEntity);
         storeEntity.setRating(rating);
         storeRepository.save(storeEntity);
         log.info("update rating using storeID :"+storeEntity.getStoreId());

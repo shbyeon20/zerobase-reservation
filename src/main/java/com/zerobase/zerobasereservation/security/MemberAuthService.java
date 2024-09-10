@@ -6,6 +6,7 @@ import com.zerobase.zerobasereservation.repository.MemberRepository;
 import com.zerobase.zerobasereservation.type.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,13 +18,13 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Slf4j
 
+/*
+유저 디테일을 불러오고 저장하는 클래스
+ */
 public class MemberAuthService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtHandler jwtHandler;
-
-
 
 
     /*
@@ -36,27 +37,21 @@ public class MemberAuthService implements UserDetailsService {
             throw new UsernameNotFoundException("Member already exists");
         }
 
-        MemberDetails.builder().memberId(memberId).password(passwordEncoder.encode(password)).build();
+        memberRepository.save(
+                MemberDetails.builder()
+                        .memberId(memberId)
+                        .password(passwordEncoder.encode(password))
+                        .build());
     }
 
-    /*
-       ID와 PW를 기반으로 daoAuth를 진행하고 일치한다면 JWT를 반환함
-     */
+    public UserDetails authenticate(String memberId, String password ){
+        UserDetails userDetails = this.loadUserByUsername(memberId);
 
-    public String daoAuth(String memberId, String password){
-
-        MemberDetails memberDetails = memberRepository.findByMemberId(memberId).
-                orElseThrow(() -> new UsernameNotFoundException("Member does not exist"));
-
-        if(!passwordEncoder.matches(password, memberDetails.getPassword())){
-            throw new CustomException(ErrorCode.PASSWORD_UNMATCHED);
+        if(!passwordEncoder.matches(password, userDetails.getPassword())){
+            throw new BadCredentialsException("Wrong password");
         }
-
-        return jwtHandler.generateToken(memberDetails.getMemberId(),
-                memberDetails.getRole());
+        return userDetails;
     }
-
-
 
 
 

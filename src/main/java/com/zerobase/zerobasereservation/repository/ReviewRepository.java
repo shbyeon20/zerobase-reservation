@@ -17,5 +17,5 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity, Long >
     // Custom query to calculate the average rating for a specific store
     @Query("SELECT ROUND(AVG(r.rating), 1) FROM ReviewEntity r WHERE " +
             "r.storeEntity = :storeEntity")
-    Double findAverageRatingByStoreEntity(@Param("storeId") StoreEntity storeEntity);
+    Double reupdateAverageRating (@Param("storeEntity") StoreEntity storeEntity);
 }

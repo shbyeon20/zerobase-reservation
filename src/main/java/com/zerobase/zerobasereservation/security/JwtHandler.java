@@ -1,6 +1,5 @@
 package com.zerobase.zerobasereservation.security;
 
-import com.zerobase.zerobasereservation.type.ROLE;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -10,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -17,6 +17,7 @@ import org.springframework.util.StringUtils;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 import java.util.Date;
 
 @Component
@@ -25,7 +26,6 @@ import java.util.Date;
 public class JwtHandler {
     private static final String KEY_ROLES = "roles";
     private static final Long TIME_TOKEN_EXPIRE_TIME = 1000 * 60 * 60L;//1hour
-    private final MemberAuthService memberAuthService;
 
     @Value("${spring.jwt.secret}")
     private String secretKey;
@@ -35,7 +35,7 @@ public class JwtHandler {
       (authorities)를 JWT 에 담아내어 반환한다.
      */
 
-    public String generateToken(String username, ROLE role) {
+    public String generateToken(String username, Collection<? extends GrantedAuthority> role) {
         log.info("Generating token for user: " + username + " with role: " + role);
 
         SecretKey SecretKeyObject = new SecretKeySpec(secretKey.getBytes(),
@@ -90,17 +90,7 @@ public class JwtHandler {
     }
 
 
-    /*
-       spring context 에 담을 Authentication 을 생성함
-    */
 
-    public Authentication getJwtAuthentication(String jwt) {
-        log.info("creat authentication through token : " + jwt);
-        UserDetails userDetails =
-                memberAuthService.loadUserByUsername(this.getUsernameFromToken(jwt));
-        return new UsernamePasswordAuthenticationToken(userDetails,"",
-                userDetails.getAuthorities());
-    }
 
 
 

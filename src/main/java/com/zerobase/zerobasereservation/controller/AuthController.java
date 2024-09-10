@@ -2,6 +2,7 @@ package com.zerobase.zerobasereservation.controller;
 
 
 import com.zerobase.zerobasereservation.dto.*;
+import com.zerobase.zerobasereservation.security.JwtHandler;
 import com.zerobase.zerobasereservation.security.MemberAuthService;
 import com.zerobase.zerobasereservation.service.PartnerService;
 import com.zerobase.zerobasereservation.service.UserService;
@@ -9,6 +10,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +23,10 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final MemberAuthService memberAuthService;
+    private final JwtHandler jwtHandler;
     private final UserService userService;
     private final PartnerService partnerService;
+    private final PasswordEncoder passwordEncoder;
 
 
     /*
@@ -78,7 +84,11 @@ public class AuthController {
      */
     @PostMapping("/signIn")
     public ResponseEntity<String> signIn(@RequestBody @Validated SignAuth.SignIn signIn) {
-        String token = memberAuthService.daoAuth(signIn.getId(), signIn.getPassword());
+
+        UserDetails userDetails = memberAuthService.authenticate(signIn.getId(), signIn.getPassword());
+
+        String token = jwtHandler.generateToken(userDetails.getUsername(), userDetails.getAuthorities());
+
         return ResponseEntity.ok(token);
     }
 
