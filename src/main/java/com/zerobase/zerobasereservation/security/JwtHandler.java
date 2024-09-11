@@ -7,10 +7,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -35,17 +32,17 @@ public class JwtHandler {
       (authorities)를 JWT 에 담아내어 반환한다.
      */
 
-    public String generateToken(String username, Collection<? extends GrantedAuthority> role) {
-        log.info("Generating token for user: " + username + " with role: " + role);
+    public String generateToken(String userId, Collection<? extends GrantedAuthority> role) {
+        log.info("Generating token for user: " + userId + " with role: " + role);
 
         SecretKey SecretKeyObject = new SecretKeySpec(secretKey.getBytes(),
                 SignatureAlgorithm.HS512.getJcaName());
 
         Claims customClaims = Jwts.claims();
-        customClaims.put("ROLE",role);
+        customClaims.put(KEY_ROLES,role);
 
         return Jwts.builder()
-                .setSubject(username)
+                .setSubject(userId)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime()+TIME_TOKEN_EXPIRE_TIME))
                 .signWith( SecretKeyObject,SignatureAlgorithm.HS512)
@@ -54,7 +51,7 @@ public class JwtHandler {
     }
 
 
-    public String getUsernameFromToken(String token) {
+    public String getMemberIdFromToken(String token) {
         log.info("get username from token : " + token);
         Claims claims = this.parseClaimsFromToken(token);
         return claims.getSubject();

@@ -46,6 +46,10 @@ public class ReviewService {
                 () -> new CustomException(ErrorCode.RESERVATION_ID_NONEXISTENT)
         );
 
+        if(!Objects.equals(reservationEntity.getUserEntity().getUserId(), userId)){
+            throw new CustomException(ErrorCode.USERID_REVIEWUSER_UNMATCHED);
+        }
+
         UserEntity userEntity = userRepository.findByuserId(userId).orElseThrow(
                 () -> new CustomException(ErrorCode.USERID_NONEXISTENT)
         );
@@ -82,6 +86,7 @@ public class ReviewService {
 
         ReviewEntity reviewEntity = reviewRepository.findByReviewID(reviewId).orElseThrow(
                 () -> new CustomException(ErrorCode.REVIEW_NOT_FOUND));
+
 
         if(!Objects.equals(reviewEntity.getUserEntity().getUserId(), userId)){
             throw new CustomException(ErrorCode.USERID_REVIEWUSER_UNMATCHED);
@@ -122,7 +127,7 @@ public class ReviewService {
         if(!Objects.equals(reviewEntity.getUserEntity().getUserId(), memberId)
                 || !Objects.equals(reviewEntity.getStoreEntity()
                 .getPartnerEntity().getPartnerId(), memberId)){
-            throw new CustomException(ErrorCode.USERID_REVIEWUSER_UNMATCHED);
+            throw new CustomException(ErrorCode.MEMBERID_REVIEWUSER_UNMATCHED);
         }
 
         reviewEntity.setReviewStatus(ReviewStatus.DELETED);

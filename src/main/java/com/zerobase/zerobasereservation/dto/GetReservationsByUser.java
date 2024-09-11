@@ -17,8 +17,7 @@ public class GetReservationsByUser {
     @Getter @Setter
     @AllArgsConstructor
     public static class Request {
-        @Size(min=1,max=10)
-        private String userId;
+
         @Size(min=1,max=10)
         private String storeId;
 

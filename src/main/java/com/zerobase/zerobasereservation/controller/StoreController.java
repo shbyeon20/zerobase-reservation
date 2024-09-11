@@ -2,6 +2,7 @@ package com.zerobase.zerobasereservation.controller;
 
 import com.zerobase.zerobasereservation.dto.CreateStore;
 import com.zerobase.zerobasereservation.dto.StoreDto;
+import com.zerobase.zerobasereservation.security.JwtHandler;
 import com.zerobase.zerobasereservation.service.StoreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,19 +20,25 @@ import java.util.List;
 @RequestMapping("/store")
 public class StoreController {
     private final StoreService storeService;
+    private final JwtHandler jwtHandler;
 
 
     /*
      partner로부터 store 정보를 입력받아서 store record를 생성할것
      */
 
-    @PostMapping("/partner/create")
+    @PostMapping("/create")
     public ResponseEntity<CreateStore.Response> createStore(
-            @RequestBody @Valid CreateStore.Request request) {
-        log.info("Post controller start  for  store creation : "+ request.getPartnerId());
+            @RequestBody @Valid CreateStore.Request request,
+            @RequestHeader("Authorization") String token) {
+
+        String memberId = jwtHandler.getMemberIdFromToken(token);
+
+        log.info("Post controller start  for  store creation : " );
+
 
         StoreDto store = storeService.createStore(
-                request.getPartnerId(),
+                memberId,
                 request.getStoreId(),
                 request.getAddress(),
                 request.getStoreComment()
@@ -57,10 +64,13 @@ public class StoreController {
 
     @GetMapping("/{storeId}/user/search")
     public ResponseEntity<StoreDto> findByStoreId(
-            @PathVariable String storeId)
+            @PathVariable String storeId,
+            @RequestHeader("Authorization") String token)
     {
+        String partnerId = jwtHandler.getMemberIdFromToken(token);
+
         log.info("Get Controller start for store Info using storeId :" +storeId);
-        return ResponseEntity.ok(storeService.findByStoreId(storeId));
+        return ResponseEntity.ok(storeService.findByStoreId(partnerId,storeId));
     }
 
 

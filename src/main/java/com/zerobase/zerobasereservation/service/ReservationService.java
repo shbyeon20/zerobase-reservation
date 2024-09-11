@@ -118,14 +118,19 @@ public class ReservationService {
      */
 
     @PreAuthorize("#partnerId==authentication.principal.id")
-    public ReservationDto acceptReservation(String reservationId) {
+    public ReservationDto acceptReservation(String partnerId,
+                                            String reservationId) {
 
-        log.info("Confirming reservation status for reservation {}",
+        log.info("Accepting reservation status for reservation {}",
                 reservationId);
 
         ReservationEntity reservation =
         reservationRepository.findByReservationId(reservationId).orElseThrow
                 (() -> new CustomException(ErrorCode.RESERVATION_ID_NONEXISTENT));
+
+        if(!Objects.equals(partnerId, reservation.getStoreEntity().getPartnerEntity().getPartnerId())){
+            throw new CustomException(ErrorCode.MEMBERID_STOREOWNER_UNMATCHED);
+        }
 
 
         if(!reservation.getReservationStatus().equals(ReservationStatus.REQUESTED)) {
@@ -148,8 +153,9 @@ public class ReservationService {
     예약을 확정처리를 하는 절차
      */
 
-
-    public ReservationDto rejectReservation(String reservationId) {
+    @PreAuthorize("#partnerId==authentication.principal.id")
+    public ReservationDto rejectReservation(String partnerId,
+                                            String reservationId) {
 
         log.info("Rejecting reservation status for reservation {}",
                 reservationId);
@@ -157,6 +163,11 @@ public class ReservationService {
         ReservationEntity reservationEntity =
                 reservationRepository.findByReservationId(reservationId).orElseThrow
                         (() -> new CustomException(ErrorCode.RESERVATION_ID_NONEXISTENT));
+
+        if(!Objects.equals(reservationEntity.getStoreEntity().getPartnerEntity().getPartnerId(), partnerId)){
+            throw new CustomException(ErrorCode.MEMBERID_STOREOWNER_UNMATCHED);
+        }
+
 
         if(!reservationEntity.getReservationStatus().equals(ReservationStatus.REQUESTED)) {
             throw new CustomException(ErrorCode.RESERVATION_STATUS_ERROR);

@@ -20,8 +20,6 @@ public class CreateReservation {
 
 
         @Size(min=1,max=10)
-        private String userId;
-        @Size(min=1,max=10)
         private String storeId;
         @NotNull
         private LocalDateTime reservationTime;

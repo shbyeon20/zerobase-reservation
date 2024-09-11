@@ -1,6 +1,7 @@
 package com.zerobase.zerobasereservation.controller;
 
 import com.zerobase.zerobasereservation.dto.*;
+import com.zerobase.zerobasereservation.security.JwtHandler;
 import com.zerobase.zerobasereservation.service.ReservationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import java.util.List;
 @RequestMapping("/reservation")
 public class ReservationController {
     private final ReservationService reservationService;
+    private final JwtHandler jwtHandler;
 
     //todo : validation에 관련 Exception handling 처리할것
 
@@ -27,11 +29,15 @@ public class ReservationController {
 
     @PostMapping("/user/create")
     public ResponseEntity<CreateReservation.Response> createReservation(
-            @RequestBody @Valid CreateReservation.Request request) {
-        log.info("Post controller start  for  store creation : "+ request.getUserId());
+            @RequestBody @Valid CreateReservation.Request request,
+            @RequestHeader("Authorization") String token) {
+
+        String userId = jwtHandler.getMemberIdFromToken(token);
+
+        log.info("Post controller start  for  store creation : "+ userId);
 
         ReservationDto reservationDto = reservationService.createReservation(
-                request.getUserId(),
+                userId,
                 request.getStoreId(),
                 request.getReservationTime()
         );
@@ -46,13 +52,18 @@ public class ReservationController {
      */
     @PostMapping("/partner/list")
     public ResponseEntity<List<GetReservationsByPartner.Response>> getReservationsByUserId(
-            @RequestBody @Valid GetReservationsByPartner.Request request){
+            @RequestBody @Valid GetReservationsByPartner.Request request,
+            @RequestHeader("Authorization") String token){
+
+        String partnerId = jwtHandler.getMemberIdFromToken(token);
+
+
         log.info("Get controller start for fetching reservation " +
                 " by store "+request.getStoreId());
 
         List<ReservationDto> reservationDtos =
                 reservationService.getReservationsByPartner(
-                        request.getPartnerId(), request.getStoreId());
+                        partnerId, request.getStoreId());
 
         return ResponseEntity.ok(
                 reservationDtos.stream().map(GetReservationsByPartner.Response::fromDto).toList());
@@ -66,13 +77,19 @@ public class ReservationController {
 
     @PostMapping("/user/list")
     public ResponseEntity<List<GetReservationsByUser.Response>> getReservationsByUserId(
-            @RequestBody @Valid GetReservationsByUser.Request request){
+            @RequestBody @Valid GetReservationsByUser.Request request,
+            @RequestHeader("Authorization") String token){
+
+
+        String userId = jwtHandler.getMemberIdFromToken(token);
+
         log.info("Get controller start for fetching reservation " +
-                "by user : "+request.getUserId()+" by store "+request.getStoreId());
+                "by user : "+userId+" by store "+request.getStoreId());
 
 
         List<ReservationDto> reservationDtos =
-                reservationService.searchReservationsByUser(request.getUserId(), request.getStoreId());
+                reservationService.searchReservationsByUser(userId,
+                        request.getStoreId());
         System.out.println(reservationDtos.toString());
 
         return ResponseEntity.ok(
@@ -90,13 +107,18 @@ public class ReservationController {
 
     @PatchMapping("/partner/accept")
     public ResponseEntity<UpdateStatusReservation.Response> acceptReservation(
-            @RequestBody @Valid  UpdateStatusReservation.Request request){
+            @RequestBody @Valid  UpdateStatusReservation.Request request,
+            @RequestHeader("Authorization") String token){
+
+        String memberId = jwtHandler.getMemberIdFromToken(token);
+
         log.info("Patch controller start for confirming reservation status " +
                 "using resrvationId : "+request.getReservationId());
 
 
         ReservationDto reservationDto =
                 reservationService.acceptReservation(
+                        memberId,
                         request.getReservationId()
                         );
 
@@ -112,13 +134,19 @@ public class ReservationController {
 
     @PatchMapping("partner/reject")
     public ResponseEntity<UpdateStatusReservation.Response> rejectReservation(
-            @RequestBody @Valid  UpdateStatusReservation.Request request){
+            @RequestBody @Valid  UpdateStatusReservation.Request request,
+            @RequestHeader("Authorization") String token){
+
+        String memberId = jwtHandler.getMemberIdFromToken(token);
+
+
         log.info("Patch controller start for rejecting reservation status " +
                 "using resrvationId : "+ request.getReservationId());
 
 
         ReservationDto reservationDto =
                 reservationService.rejectReservation(
+                        memberId,
                         request.getReservationId()
                 );
 

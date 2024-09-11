@@ -55,7 +55,7 @@ public class MemberAuthService implements UserDetailsService {
 
 
     @Override
-    public  UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return memberRepository.findByMemberId(username).orElseThrow(() -> new UsernameNotFoundException("Member does not exist"));
+    public  UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+        return memberRepository.findByMemberId(userId).orElseThrow(() -> new UsernameNotFoundException("Member does not exist"));
     }
 }

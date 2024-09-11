@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,7 +27,6 @@ public class AuthController {
     private final JwtHandler jwtHandler;
     private final UserService userService;
     private final PartnerService partnerService;
-    private final PasswordEncoder passwordEncoder;
 
 
     /*
@@ -64,7 +62,7 @@ public class AuthController {
         memberService 를 호출하여 Transaction 관리함.
      */
 
-    @PostMapping("/users")
+    @PostMapping("/user")
     public ResponseEntity<CreateUser.Response> createUser(
             @RequestBody @Valid CreateUser.Request request) {
 
@@ -86,7 +84,7 @@ public class AuthController {
     /*
     Dao Authentication 을 행하고 결과값으로 JWT token 을 받음
      */
-    @PostMapping("/signIn")
+    @PostMapping("/sign-in")
     public ResponseEntity<String> signIn(
             @RequestBody @Validated SignAuth.SignIn signIn) {
 

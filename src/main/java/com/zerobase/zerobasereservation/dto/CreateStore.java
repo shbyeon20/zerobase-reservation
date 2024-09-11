@@ -16,8 +16,7 @@ public class CreateStore {
     @AllArgsConstructor
     public static class Request {
 
-        @Size(min=1,max=10)
-        private String partnerId;
+
         @Size(min=1,max=10)
         private String storeId;
 

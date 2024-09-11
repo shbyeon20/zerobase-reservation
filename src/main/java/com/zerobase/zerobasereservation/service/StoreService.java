@@ -10,11 +10,13 @@ import com.zerobase.zerobasereservation.repository.StoreRepository;
 import com.zerobase.zerobasereservation.type.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -25,13 +27,18 @@ public class StoreService {
     private final PartnerRepository partnerRepository;
     private final ReviewRepository reviewRepository;
 
+    @PreAuthorize("#partnerId == authentication.principal.id")
     public StoreDto createStore(String partnerId, String storeId,
                                 String address, String storeComment) {
         log.info("store creation service start");
         log.info("Find by partnerId for partnerEntity :" +partnerId  );
+
         PartnerEntity partnerEntity =
                 partnerRepository.findBypartnerId(partnerId)
-                        .orElseThrow(() -> new CustomException(ErrorCode.PARTNERID_NONEXISTENT, "존재하지 않는 partnerID입니다 : " + partnerId));
+                        .orElseThrow(() -> new CustomException(ErrorCode.PARTNERID_NONEXISTENT));
+
+
+
 
         return StoreDto.fromEntity(storeRepository.save(
                         StoreEntity.builder()
@@ -46,6 +53,7 @@ public class StoreService {
 
     }
 
+    @PreAuthorize("#partnerId == authentication.principal.id")
     public List<StoreDto> findByPartnerId(String partnerId) {
         log.info("find Store using partnerID :"+partnerId);
         PartnerEntity partnerEntity = partnerRepository.findBypartnerId(partnerId)
@@ -61,11 +69,18 @@ public class StoreService {
     storeId로 등록된 매장레코드를 조회하여 매장에 관한 정보를 Web으로 반환함
      */
 
-    public StoreDto findByStoreId(String storeId) {
+    @PreAuthorize("#partnerId == authentication.principal.id")
+    public StoreDto findByStoreId(String partnerId, String storeId) {
         log.info("find Store using storeID :"+storeId);
-        return StoreDto.fromEntity(storeRepository.findBystoreId(storeId)
-                .orElseThrow(()->new CustomException(
-                        ErrorCode.STOREID_NONEXISTENT)));
+
+        StoreEntity storeEntity = storeRepository.findBystoreId(storeId)
+                .orElseThrow(() -> new CustomException(ErrorCode.STOREID_NONEXISTENT));
+
+        if(!Objects.equals(storeEntity.getPartnerEntity().getPartnerId(), partnerId)) {
+            throw new CustomException(ErrorCode.MEMBERID_STOREOWNER_UNMATCHED);
+        }
+
+        return StoreDto.fromEntity(storeEntity);
     }
 
 

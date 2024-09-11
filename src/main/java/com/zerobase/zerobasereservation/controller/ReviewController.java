@@ -4,6 +4,7 @@ import com.zerobase.zerobasereservation.dto.CreateReview;
 import com.zerobase.zerobasereservation.dto.DeleteReview;
 import com.zerobase.zerobasereservation.dto.ReviewDto;
 import com.zerobase.zerobasereservation.exception.UpdateReview;
+import com.zerobase.zerobasereservation.security.JwtHandler;
 import com.zerobase.zerobasereservation.service.ReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/review")
 public class ReviewController {
     private final ReviewService reviewService;
-
+    private final JwtHandler jwtHandler;
 
 
 
@@ -26,11 +27,15 @@ public class ReviewController {
      */
     @PostMapping("/user/create")
     public ResponseEntity<CreateReview.Response> createReview(
-            @RequestBody @Valid CreateReview.Request request) {
+            @RequestBody @Valid CreateReview.Request request,
+            @RequestHeader("Authorization") String token) {
+
+        String memberId = jwtHandler.getMemberIdFromToken(token);
+
         log.info("Post controller start  for  review creation : {}", request.getReservationId());
 
         ReviewDto reviewDto = reviewService.createReview(
-                request.getUserId(),
+                memberId,
                 request.getRating(),
                 request.getReservationId(),
                 request.getReviewContents()
@@ -45,10 +50,14 @@ public class ReviewController {
 
     @PatchMapping("/user/revise")
     public ResponseEntity<UpdateReview.Response> updateReview(
-            @RequestBody @Valid UpdateReview.Request request) {
+            @RequestBody @Valid UpdateReview.Request request,
+            @RequestHeader("Authorization") String token) {
+
+        String memberId = jwtHandler.getMemberIdFromToken(token);
+
         log.info("Review update request received for reviewId: {}", request.getReviewId());
         ReviewDto reviewDto = reviewService.updateReview(
-                request.getUserId(),
+                memberId,
                 request.getReviewId(),
                 request.getRating(),
                 request.getReviewContents());

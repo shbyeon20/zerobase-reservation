@@ -25,21 +25,20 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final MemberAuthService memberAuthService;
 
 
-    /*
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
+        /*
      request header 에 authentication 을 parsing 함. parsing 후 jwt 라이브러리를 통해
      claim 파싱하여 token의 유효성검사를 실행. 유효하다면 SecurityContext에 authentication
      생성
 
      */
-    private final String REQUEST_HEADER = "Authorization";
-    private final String REQUEST_PREFIX = "Bearer ";
-
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
+        String REQUEST_HEADER = "Authorization";
         String authorization = request.getHeader(REQUEST_HEADER);
         String token="";
 
+        String REQUEST_PREFIX = "Bearer ";
         if (ObjectUtils.isEmpty(authorization) && authorization.startsWith(REQUEST_PREFIX)) {
             token = authorization.substring(REQUEST_PREFIX.length());
         }
@@ -58,7 +57,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     public Authentication getJwtAuthentication(String jwt) {
         log.info("creat authentication through token : " + jwt);
         UserDetails userDetails =
-                memberAuthService.loadUserByUsername(jwtHandler.getUsernameFromToken(jwt));
+                memberAuthService.loadUserByUsername(jwtHandler.getMemberIdFromToken(jwt));
         return new UsernamePasswordAuthenticationToken(userDetails,"",
                 userDetails.getAuthorities());
     }
