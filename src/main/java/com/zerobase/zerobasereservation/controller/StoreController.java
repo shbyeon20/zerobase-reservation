@@ -16,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 
 
+@RequestMapping("/store")
 public class StoreController {
     private final StoreService storeService;
 
@@ -24,8 +25,8 @@ public class StoreController {
      partner로부터 store 정보를 입력받아서 store record를 생성할것
      */
 
-    @PostMapping("/stores")
-    public ResponseEntity<CreateStore.Response> createPartner(
+    @PostMapping("/partner/create")
+    public ResponseEntity<CreateStore.Response> createStore(
             @RequestBody @Valid CreateStore.Request request) {
         log.info("Post controller start  for  store creation : "+ request.getPartnerId());
 
@@ -42,7 +43,7 @@ public class StoreController {
     /*
     파트너ID로 등록된 매장의 리스트를 파트너가 조회하는 기능
      */
-    @GetMapping("/stores/partner/search/{partnerId}")
+    @GetMapping("/partner/{partnerId}/search")
     public ResponseEntity<List<StoreDto>> findByPartnerId(
             @PathVariable String partnerId)
     {
@@ -54,7 +55,7 @@ public class StoreController {
     스토어ID로 등록된 매장의 정보를 사용자가 조회하는 기능
      */
 
-    @GetMapping("/stores/user/searchbystoreId/{storeId}")
+    @GetMapping("/{storeId}/user/search")
     public ResponseEntity<StoreDto> findByStoreId(
             @PathVariable String storeId)
     {

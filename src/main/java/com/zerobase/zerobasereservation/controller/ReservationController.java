@@ -6,16 +6,14 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/reservation")
 public class ReservationController {
     private final ReservationService reservationService;
 
@@ -27,7 +25,7 @@ public class ReservationController {
      단, reservation ID는 UUID로 자동생성되어 유저에게 전달되고 예약변경시 확인됨
      */
 
-    @PostMapping("/reservations/user/create")
+    @PostMapping("/user/create")
     public ResponseEntity<CreateReservation.Response> createReservation(
             @RequestBody @Valid CreateReservation.Request request) {
         log.info("Post controller start  for  store creation : "+ request.getUserId());
@@ -46,14 +44,15 @@ public class ReservationController {
         생성된 Reservation을 매장점주가 storeId를 통해서 조회를함
 
      */
-    @PostMapping("/reservations/partner/list")
+    @PostMapping("/partner/list")
     public ResponseEntity<List<GetReservationsByPartner.Response>> getReservationsByUserId(
             @RequestBody @Valid GetReservationsByPartner.Request request){
         log.info("Get controller start for fetching reservation " +
                 " by store "+request.getStoreId());
 
         List<ReservationDto> reservationDtos =
-                reservationService.getReservationsByPartner(request.getStoreId());
+                reservationService.getReservationsByPartner(
+                        request.getPartnerId(), request.getStoreId());
 
         return ResponseEntity.ok(
                 reservationDtos.stream().map(GetReservationsByPartner.Response::fromDto).toList());
@@ -65,7 +64,7 @@ public class ReservationController {
 
      */
 
-    @PostMapping("/reservations/user/list")
+    @PostMapping("/user/list")
     public ResponseEntity<List<GetReservationsByUser.Response>> getReservationsByUserId(
             @RequestBody @Valid GetReservationsByUser.Request request){
         log.info("Get controller start for fetching reservation " +
@@ -73,7 +72,7 @@ public class ReservationController {
 
 
         List<ReservationDto> reservationDtos =
-                reservationService.getReservationsByUser(request.getUserId(), request.getStoreId());
+                reservationService.searchReservationsByUser(request.getUserId(), request.getStoreId());
         System.out.println(reservationDtos.toString());
 
         return ResponseEntity.ok(
@@ -89,7 +88,7 @@ public class ReservationController {
      */
 
 
-    @PatchMapping("/reservations/partner/accept")
+    @PatchMapping("/partner/accept")
     public ResponseEntity<UpdateStatusReservation.Response> acceptReservation(
             @RequestBody @Valid  UpdateStatusReservation.Request request){
         log.info("Patch controller start for confirming reservation status " +
@@ -111,7 +110,7 @@ public class ReservationController {
               매장주인이 reserved 상태인 예약을 예약을 거절할때 rejected상태로 변경함
      */
 
-    @PatchMapping("/reservations/reject")
+    @PatchMapping("partner/reject")
     public ResponseEntity<UpdateStatusReservation.Response> rejectReservation(
             @RequestBody @Valid  UpdateStatusReservation.Request request){
         log.info("Patch controller start for rejecting reservation status " +
@@ -133,7 +132,7 @@ public class ReservationController {
 
      */
 
-    @PatchMapping("/reservations/user/kiosk/confirm")
+    @PatchMapping("/kiosk/confirm")
     public ResponseEntity<UpdateStatusReservation.Response> confirmReservation(
             @RequestBody @Valid  UpdateStatusReservation.Request request){
         log.info("Patch controller start for confriming reservation status " +

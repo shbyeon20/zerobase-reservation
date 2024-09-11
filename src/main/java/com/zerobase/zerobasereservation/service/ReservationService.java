@@ -13,11 +13,13 @@ import com.zerobase.zerobasereservation.type.ReservationStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -31,21 +33,24 @@ public class ReservationService {
 
 
     /*
-    연관 entity인 Userentity와 storeentity를 불러오고, reservationentity에 담아서 생성
+    Parameter 정보와 userEntity 및 storeEntity 를 불러오고,
+    reservationEntity 에 담아서 REQUESTED Status 로 생성.
      */
 
+
+    @PreAuthorize("#userId==authentication.principal.id")
     public ReservationDto createReservation(String userId, String storeId,
                                             LocalDateTime reservationTime) {
         log.info("Creating reservation for user {} and store {}", userId, storeId);
 
         UserEntity userEntity =
                 userRepository.findByuserId(userId).orElseThrow
-                        (() -> new CustomException(ErrorCode.USER_ID_NONEXISTENT,
+                        (() -> new CustomException(ErrorCode.USERID_NONEXISTENT,
                                 "partnerId not existing : " + userId));
 
         StoreEntity storeEntity =
                 storeRepository.findBystoreId(storeId).orElseThrow
-                        (() -> new CustomException(ErrorCode.STORE_ID_NONEXISTENT
+                        (() -> new CustomException(ErrorCode.STOREID_NONEXISTENT
                                 , "partnerId not existing : " + storeId));
 
 
@@ -62,12 +67,7 @@ public class ReservationService {
         return ReservationDto.fromEntity(reservationEntity);
     }
 
-    /*
-    고객이 매장의 현장을 방문하여 키오스크를 통해 예약확정을 함
-    단, 1.현재시간이 예약시간의 10분보다 더 많이 남았을 경우
-        2. 주인이 예약을 거절하지 않아서 status가 Accepted인 경우에만
-        예약확정이 가능함
-     */
+
 
 
 
@@ -77,8 +77,9 @@ public class ReservationService {
            생성된 Reservation을 유저가 userId와 storeId를 통해서 조회를 함
      */
 
-    public List<ReservationDto> getReservationsByUser(String userId,
-                                                      String storeId) {
+    @PreAuthorize("#userId==authentication.principal.id")
+    public List<ReservationDto> searchReservationsByUser(String userId,
+                                                         String storeId) {
         log.info("Retrieving reservations for user {} and store {}", userId, storeId);
         List<ReservationEntity> reservationEntities =
                 reservationRepository.findAllByUserEntity_UserIdAndStoreEntity_StoreIdOrderByReservationTime(userId, storeId);
@@ -91,12 +92,21 @@ public class ReservationService {
     /*
     점주가 예약상태와 관련없이 모든 예약 내역을 조회함
      */
-
-    public List<ReservationDto> getReservationsByPartner(String storeId) {
+    @PreAuthorize("#partnerId==authentication.principal.id")
+    public List<ReservationDto> getReservationsByPartner
+            (String partnerId, String storeId) {
         log.info("Retrieving reservations for partner {}", storeId);
+
+        StoreEntity storeEntity = storeRepository.findBystoreId(storeId)
+                .orElseThrow(() -> new CustomException(ErrorCode.STOREID_NONEXISTENT));
+
+        if(!Objects.equals(storeEntity.getPartnerEntity().getPartnerId(), partnerId)){
+            throw new CustomException(ErrorCode.PARTNERID_NONEXISTENT);
+        }
 
         List<ReservationEntity> reservationEntities =
                 reservationRepository.findAllByStoreEntity_StoreIdOrderByReservationTime(storeId);
+
 
         return reservationEntities.stream().map(ReservationDto::fromEntity).toList();
 
@@ -107,6 +117,7 @@ public class ReservationService {
     예약을 확정처리를 하는 절차
      */
 
+    @PreAuthorize("#partnerId==authentication.principal.id")
     public ReservationDto acceptReservation(String reservationId) {
 
         log.info("Confirming reservation status for reservation {}",
@@ -137,6 +148,7 @@ public class ReservationService {
     예약을 확정처리를 하는 절차
      */
 
+
     public ReservationDto rejectReservation(String reservationId) {
 
         log.info("Rejecting reservation status for reservation {}",
@@ -162,8 +174,13 @@ public class ReservationService {
 
 
     /*
-      user가 키오스크에 방문하여
-     */
+   고객이 매장의 현장을 방문하여 키오스크를 통해 예약확정을 함. 키오스크이니 인증은 생략.
+   단, 1.현재시간이 예약시간의 10분보다 더 많이 남았을 경우
+       2. 주인이 예약을 거절하지 않아서 status가 Accepted인 경우에만
+       예약확정이 가능함
+    */
+
+
     public ReservationDto confirmReservation(String reservationId) {
 
         log.info("Confirming reservation status for reservation {}",

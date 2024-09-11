@@ -9,28 +9,25 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/review")
 public class ReviewController {
     private final ReviewService reviewService;
 
 
 
 
-    // reservation 레코드의 정보를 통해서 review를 생성하고 관계를 형성함.
-    // 리뷰를 생성
-
-    @PostMapping("/reviews")
+    /*
+    * user 는 Confirmed 된 reservationId 를 mapping 하여 review 를 만든다
+     */
+    @PostMapping("/user/create")
     public ResponseEntity<CreateReview.Response> createReview(
             @RequestBody @Valid CreateReview.Request request) {
-        log.info("Post controller start  for  review creation : "
-                + request.getReservationId());
+        log.info("Post controller start  for  review creation : {}", request.getReservationId());
 
         ReviewDto reviewDto = reviewService.createReview(
                 request.getUserId(),
@@ -41,28 +38,38 @@ public class ReviewController {
 
         return ResponseEntity.ok(CreateReview.Response.fromDto(reviewDto));
     }
+    /*
+    *user 는 생성된 reviewId를 통해서 자신이 생성한 리뷰에 한하여 수정한다.
+     */
 
-    // 사용자에 의해서 수정
-    @PatchMapping("/reviews/revise")
+
+    @PatchMapping("/user/revise")
     public ResponseEntity<UpdateReview.Response> updateReview(
             @RequestBody @Valid UpdateReview.Request request) {
         log.info("Review update request received for reviewId: {}", request.getReviewId());
         ReviewDto reviewDto = reviewService.updateReview(
+                request.getUserId(),
                 request.getReviewId(),
                 request.getRating(),
                 request.getReviewContents());
         return ResponseEntity.ok(UpdateReview.Response.fromDto(reviewDto));
     }
 
-    @PatchMapping("/reviews/delete")
+
+
+    @PatchMapping("/delete")
     public ResponseEntity<DeleteReview.Response> deleteReview(
             @RequestBody @Valid DeleteReview.Request request) {
         log.info("Delete request received for reviewId: {}", request.getReviewId());
         return ResponseEntity.ok(DeleteReview.Response.fromDTO(
-                reviewService.deleteReview(request.getReviewId())));
+                reviewService.deleteReview(
+                        request.getMemberId(), request.getReviewId())));
 
     }
 }
+
+
+
 
 
 

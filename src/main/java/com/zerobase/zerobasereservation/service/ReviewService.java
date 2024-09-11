@@ -8,16 +8,17 @@ import com.zerobase.zerobasereservation.entity.UserEntity;
 import com.zerobase.zerobasereservation.exception.CustomException;
 import com.zerobase.zerobasereservation.repository.ReservationRepository;
 import com.zerobase.zerobasereservation.repository.ReviewRepository;
-import com.zerobase.zerobasereservation.repository.StoreRepository;
 import com.zerobase.zerobasereservation.repository.UserRepository;
 import com.zerobase.zerobasereservation.type.ErrorCode;
 import com.zerobase.zerobasereservation.type.ReviewStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -36,6 +37,8 @@ public class ReviewService {
     review의 필요정보를 받아서 review 생성하기,
     그 후 review의 store의 rating도 같이 업데이트 하기
      */
+
+    @PreAuthorize("#userId == authentication.principal.id")
     public ReviewDto createReview(String userId, Integer rating, String reservationId, String reviewContents) {
         log.info("Creating review for user {} and reservation {}", userId, reservationId);
 
@@ -44,7 +47,7 @@ public class ReviewService {
         );
 
         UserEntity userEntity = userRepository.findByuserId(userId).orElseThrow(
-                () -> new CustomException(ErrorCode.USER_ID_NONEXISTENT)
+                () -> new CustomException(ErrorCode.USERID_NONEXISTENT)
         );
 
         StoreEntity storeEntity = reservationEntity.getStoreEntity();
@@ -72,12 +75,19 @@ public class ReviewService {
     그 후 review의 store의 rating도 같이 업데이트 하기
      */
 
-    public ReviewDto updateReview(String reviewId, Integer rating, String reviewContents) {
+    @PreAuthorize("#userId == authentication.principal.id")
+    public ReviewDto updateReview(String userId, String reviewId,
+                                  Integer rating, String reviewContents) {
         log.info("Updating review for reviewId: {}", reviewId);
 
         ReviewEntity reviewEntity = reviewRepository.findByReviewID(reviewId).orElseThrow(
-                () -> new CustomException(ErrorCode.REVIEW_NOT_FOUND)
-        );
+                () -> new CustomException(ErrorCode.REVIEW_NOT_FOUND));
+
+        if(!Objects.equals(reviewEntity.getUserEntity().getUserId(), userId)){
+            throw new CustomException(ErrorCode.USERID_REVIEWUSER_UNMATCHED);
+        }
+
+
 
         reviewEntity.setRating(rating);
         reviewEntity.setReviewContents(reviewContents);
@@ -91,18 +101,29 @@ public class ReviewService {
 
     }
 
+
+
+
+
     /*
     reviw 삭제하기
     그 후 review의 store의 rating도 같이 업데이트 하기
      */
 
 
-    public ReviewDto deleteReview(String reviewId) {
+    @PreAuthorize("#memberId == authentication.principal.id")
+    public ReviewDto deleteReview(String memberId, String reviewId) {
         log.info("Setting review status to DELETED for reviewId: {}", reviewId);
 
         ReviewEntity reviewEntity = reviewRepository.findByReviewID(reviewId).orElseThrow(
                 () -> new CustomException(ErrorCode.REVIEW_NOT_FOUND)
         );
+
+        if(!Objects.equals(reviewEntity.getUserEntity().getUserId(), memberId)
+                || !Objects.equals(reviewEntity.getStoreEntity()
+                .getPartnerEntity().getPartnerId(), memberId)){
+            throw new CustomException(ErrorCode.USERID_REVIEWUSER_UNMATCHED);
+        }
 
         reviewEntity.setReviewStatus(ReviewStatus.DELETED);
         reviewEntity.setUpdatedAt(LocalDateTime.now());

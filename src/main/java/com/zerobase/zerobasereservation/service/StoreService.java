@@ -31,7 +31,7 @@ public class StoreService {
         log.info("Find by partnerId for partnerEntity :" +partnerId  );
         PartnerEntity partnerEntity =
                 partnerRepository.findBypartnerId(partnerId)
-                        .orElseThrow(() -> new CustomException(ErrorCode.PARTNER_ID_NONEXISTENT, "존재하지 않는 partnerID입니다 : " + partnerId));
+                        .orElseThrow(() -> new CustomException(ErrorCode.PARTNERID_NONEXISTENT, "존재하지 않는 partnerID입니다 : " + partnerId));
 
         return StoreDto.fromEntity(storeRepository.save(
                         StoreEntity.builder()
@@ -49,7 +49,7 @@ public class StoreService {
     public List<StoreDto> findByPartnerId(String partnerId) {
         log.info("find Store using partnerID :"+partnerId);
         PartnerEntity partnerEntity = partnerRepository.findBypartnerId(partnerId)
-                        .orElseThrow(() -> new CustomException(ErrorCode.PARTNER_ID_NONEXISTENT));
+                        .orElseThrow(() -> new CustomException(ErrorCode.PARTNERID_NONEXISTENT));
         List<StoreEntity> storeEntities =
                 storeRepository.findAllByPartnerEntity(partnerEntity);
 
@@ -65,7 +65,7 @@ public class StoreService {
         log.info("find Store using storeID :"+storeId);
         return StoreDto.fromEntity(storeRepository.findBystoreId(storeId)
                 .orElseThrow(()->new CustomException(
-                        ErrorCode.STORE_ID_NONEXISTENT)));
+                        ErrorCode.STOREID_NONEXISTENT)));
     }
 
 

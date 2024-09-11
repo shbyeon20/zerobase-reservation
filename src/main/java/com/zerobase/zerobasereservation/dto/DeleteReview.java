@@ -15,6 +15,12 @@ public class DeleteReview {
     public static class Request {
         @NotNull
         private String reviewId;
+        @NotNull
+        private String memberId;
+
+
+
+
 
     }
 
