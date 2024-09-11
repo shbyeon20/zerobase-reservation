@@ -21,7 +21,6 @@ public class ReviewController {
     private final ReviewService reviewService;
 
 
-    //todo : validation에 관련 Exception handling 처리할것
 
 
     // reservation 레코드의 정보를 통해서 review를 생성하고 관계를 형성함.

@@ -21,6 +21,11 @@ public class PartnerService {
     private final PartnerRepository partnerRepository;
     private final MemberAuthService memberAuthService;
 
+
+    /*
+    memberEntity 와 partnerEntity 를 생성하고 저장함.
+     */
+
     public PartnerDto createPartner(String partnerId, String password, String partnerName,
                                     String businessId, String phoneNumber) {
 

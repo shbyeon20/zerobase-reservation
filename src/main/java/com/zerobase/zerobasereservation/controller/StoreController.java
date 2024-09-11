@@ -15,6 +15,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 
+
 public class StoreController {
     private final StoreService storeService;
 
@@ -41,7 +42,7 @@ public class StoreController {
     /*
     파트너ID로 등록된 매장의 리스트를 파트너가 조회하는 기능
      */
-    @GetMapping("/stores/partnerId/{partnerId}")
+    @GetMapping("/stores/partner/search/{partnerId}")
     public ResponseEntity<List<StoreDto>> findByPartnerId(
             @PathVariable String partnerId)
     {
@@ -53,7 +54,7 @@ public class StoreController {
     스토어ID로 등록된 매장의 정보를 사용자가 조회하는 기능
      */
 
-    @GetMapping("/stores/storeId/{storeId}")
+    @GetMapping("/stores/user/searchbystoreId/{storeId}")
     public ResponseEntity<StoreDto> findByStoreId(
             @PathVariable String storeId)
     {

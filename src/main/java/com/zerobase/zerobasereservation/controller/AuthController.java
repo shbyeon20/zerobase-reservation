@@ -30,13 +30,13 @@ public class AuthController {
 
 
     /*
-    memberEntity 와 partnerEntity 를 최초 생성함.
-    단, memberEntity 는 관련기능은 후속추가되어 클래스 추가관리되었고 @Transactional 관리를 위해
-     controller 에서 서비스 호출하지 않고 partnerService 내에서 관련로직 호출함
+     memberEntity 와 userEntity 최초 생성함.
+     memberEntity 는 보안기능을 위해 후속 추가되어  userService 내에서
+     memberService 를 호출하여 Transaction 관리함.
 
      */
 
-    @PostMapping("/partners")
+    @PostMapping("/partner")
     public ResponseEntity<CreatePartner.Response> createPartner(
             @RequestBody @Valid CreatePartner.Request request) {
         log.info("Creating partner : {}", request);
@@ -56,8 +56,8 @@ public class AuthController {
 
     /*
         memberEntity 와 userEntity 최초 생성함.
-        단, memberEntity 는 관련기능은 후속추가되어  클래스 추가관리되었고 @Transactional 관리를 위해
-        controller 에서 서비스 호출하지 않고 userService 내에서 관련로직 호출함
+        memberEntity 는 보안기능을 위해 후속 추가되어  userService 내에서
+        memberService 를 호출하여 Transaction 관리함.
      */
 
     @PostMapping("/users")
@@ -83,11 +83,14 @@ public class AuthController {
     Dao Authentication 을 행하고 결과값으로 JWT token 을 받음
      */
     @PostMapping("/signIn")
-    public ResponseEntity<String> signIn(@RequestBody @Validated SignAuth.SignIn signIn) {
+    public ResponseEntity<String> signIn(
+            @RequestBody @Validated SignAuth.SignIn signIn) {
 
-        UserDetails userDetails = memberAuthService.authenticate(signIn.getId(), signIn.getPassword());
+        UserDetails userDetails = memberAuthService
+                .authenticate(signIn.getId(), signIn.getPassword());
 
-        String token = jwtHandler.generateToken(userDetails.getUsername(), userDetails.getAuthorities());
+        String token = jwtHandler
+                .generateToken(userDetails.getUsername(), userDetails.getAuthorities());
 
         return ResponseEntity.ok(token);
     }

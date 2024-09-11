@@ -18,6 +18,9 @@ public class UserService {
     private final UserRepository userRepository;
     private final MemberAuthService memberAuthService;
 
+    /*
+    memberEntity 와 userEntity 를 생성하고 저장함.
+     */
 
     public UserDto createUser(String userId, String password,
                               String userName, String phoneNumber) {
