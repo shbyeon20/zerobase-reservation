@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -39,13 +40,17 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String token="";
 
         String REQUEST_PREFIX = "Bearer ";
-        if (ObjectUtils.isEmpty(authorization) && authorization.startsWith(REQUEST_PREFIX)) {
+
+        log.info("authorization filter started");
+
+        if (StringUtils.hasText(authorization) && authorization.startsWith(REQUEST_PREFIX)) {
             token = authorization.substring(REQUEST_PREFIX.length());
         }
         if(!ObjectUtils.isEmpty(token)&jwtHandler.validateToken(token)){
             Authentication authentication = this.getJwtAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
+        filterChain.doFilter(request, response);
 
 
     }

@@ -6,10 +6,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 
 @Configuration
 @EnableWebSecurity
@@ -28,11 +30,10 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // 기본적인 예외 url
+                // 로그인, 로그아웃
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/css/**"
                         ,"/js/**", "/images","/h2-console/**", "/fonts/**",
                         "/images/**", "/favicon.ico").permitAll())
-                // 로그인, 로그아웃
                 .authorizeHttpRequests(auth -> auth.requestMatchers(
                         "/auth/**").permitAll())
                 // url 기반으로 partner 와 user 권한부여
@@ -40,6 +41,8 @@ public class SecurityConfig {
                         "**/partner/**").hasRole("PARTNER"))
                 .authorizeHttpRequests(auth->auth.requestMatchers(
                         "**/user/**").hasRole("USER"))
+                .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()))
+
 
                 .addFilterBefore(jwtAuthFilter,
                         UsernamePasswordAuthenticationFilter.class);
@@ -49,4 +52,7 @@ public class SecurityConfig {
 
 
 
+
+
 }
+

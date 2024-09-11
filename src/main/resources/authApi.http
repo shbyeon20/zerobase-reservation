@@ -1,0 +1,23 @@
+### Send POST request with json body
+POST http://localhost:8080/auth/partner
+Content-Type: application/json
+
+{
+  "partnerId": "bsh6226",
+  "password": "qustkdghk6226",
+  "partnerName" : "변상화",
+  "businessId": 1234567890,
+  "phoneNumber" : "01041589332"
+}
+
+### Send POST request with json body
+POST http://localhost:8080/partner
+Content-Type: application/json
+
+{
+  "partnerId": "jjh6226",
+  "password": "qustkdghk6226",
+  "partnerName" : "조정해",
+  "businessId": 1234567890,
+  "phoneNumber" : "01041589332"
+}
