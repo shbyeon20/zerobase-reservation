@@ -3,7 +3,7 @@ package com.zerobase.zerobasereservation.controller;
 
 import com.zerobase.zerobasereservation.dto.*;
 import com.zerobase.zerobasereservation.security.JwtHandler;
-import com.zerobase.zerobasereservation.security.MemberAuthService;
+import com.zerobase.zerobasereservation.service.MemberAuthService;
 import com.zerobase.zerobasereservation.service.PartnerService;
 import com.zerobase.zerobasereservation.service.UserService;
 import jakarta.validation.Valid;

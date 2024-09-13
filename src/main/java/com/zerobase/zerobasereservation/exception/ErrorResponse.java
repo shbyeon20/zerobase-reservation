@@ -1,26 +1,20 @@
 package com.zerobase.zerobasereservation.exception;
 
 import com.zerobase.zerobasereservation.type.ErrorCode;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 public class ErrorResponse {
 
-    public ErrorResponse(ErrorCode errorCode, String message) {
-        this.errorCode = errorCode;
-        this.message = errorCode.getMessage();
-    }
-
     ErrorCode errorCode;
-    private List<String> details;
-
     private String message;
+    private List<String> details = new ArrayList<>();
+
 
 }

@@ -6,6 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum ErrorCode {
+    MEMBERID_DUPLICATE("이미 존재하는 Id입니다"),
     GENERAL_ERROR("올바르지 않은 요청입니다"),
     PARTNERID_NONEXISTENT("존재하지 않는 partnerID입니다"),
     STOREID_NONEXISTENT("존재하지 않는 storeId입니다"),

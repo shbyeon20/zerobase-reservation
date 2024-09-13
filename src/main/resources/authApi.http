@@ -4,14 +4,14 @@ Content-Type: application/json
 
 {
   "partnerId": "bsh6226",
-  "password": "bsh6226123123213",
+  "password": "bsh6226",
   "partnerName" : "변상화",
   "businessId": 1234567890,
   "phoneNumber" : "01041589332"
 }
 
 ### Send POST request with json body
-POST http://localhost:8080/
+POST http://localhost:8080/auth/partner
 Content-Type: application/json
 
 {
@@ -19,5 +19,28 @@ Content-Type: application/json
   "password": "bsh6226",
   "partnerName" : "조정해",
   "businessId": 1234567890,
+  "phoneNumber" : "01041589332"
+}
+
+
+### Send POST request with json body
+POST http://localhost:8080/auth/user
+Content-Type: application/json
+
+{
+  "partnerId": "sh6226",
+  "password": "bsh6226",
+  "partnerName" : "변상화",
+  "phoneNumber" : "01041589332"
+}
+
+### Send POST request with json body
+POST http://localhost:8080/auth/partner
+Content-Type: application/json
+
+{
+  "partnerId": "sh6226",
+  "password": "bsh6226",
+  "partnerName" : "조정해",
   "phoneNumber" : "01041589332"
 }

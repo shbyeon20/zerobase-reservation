@@ -1,5 +1,6 @@
 package com.zerobase.zerobasereservation.security;
 
+import com.zerobase.zerobasereservation.service.MemberAuthService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

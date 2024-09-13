@@ -21,6 +21,6 @@ public class UserEntity {
     Long id;
     String userId;
     String userName;
-    String PhoneNumber;
+    String phoneNumber;
     LocalDateTime registrationDate;
 }

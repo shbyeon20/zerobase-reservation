@@ -1,4 +1,4 @@
-package com.zerobase.zerobasereservation.security;
+package com.zerobase.zerobasereservation.service;
 
 import com.zerobase.zerobasereservation.entity.MemberDetails;
 import com.zerobase.zerobasereservation.exception.CustomException;
@@ -34,7 +34,7 @@ public class MemberAuthService implements UserDetailsService {
     @Transactional
     public void register(String memberId, String password){
         if(memberRepository.existsByMemberId(memberId)){
-            throw new UsernameNotFoundException("Member already exists");
+            throw new CustomException(ErrorCode.MEMBERID_DUPLICATE);
         }
 
         memberRepository.save(
@@ -44,6 +44,9 @@ public class MemberAuthService implements UserDetailsService {
                         .build());
     }
 
+    /*
+       sign-in에서 사용된 id, pw가 일치하는지 확인하고, 일치하면 userdetails반환
+     */
     public UserDetails authenticate(String memberId, String password ){
         UserDetails userDetails = this.loadUserByUsername(memberId);
 

@@ -3,7 +3,6 @@ package com.zerobase.zerobasereservation.service;
 import com.zerobase.zerobasereservation.dto.UserDto;
 import com.zerobase.zerobasereservation.entity.UserEntity;
 import com.zerobase.zerobasereservation.repository.UserRepository;
-import com.zerobase.zerobasereservation.security.MemberAuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,7 +32,7 @@ public class UserService {
                 UserEntity.builder()
                         .userId(userId)
                         .userName(userName)
-                        .PhoneNumber(phoneNumber)
+                        .phoneNumber(phoneNumber)
                         .registrationDate(LocalDateTime.now())
                         .build()
         );

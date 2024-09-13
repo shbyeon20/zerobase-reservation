@@ -37,12 +37,10 @@ public class SecurityConfig {
                         "/auth/**").permitAll())
                 // url 기반으로 partner 와 user 권한부여
                 .authorizeHttpRequests(auth->auth.requestMatchers(
-                        "**/partner/**").hasRole("PARTNER"))
+                        "/**/partner/**").hasRole("PARTNER"))
                 .authorizeHttpRequests(auth->auth.requestMatchers(
-                        "**/user/**").hasRole("USER"))
+                        "/**/user/**").hasRole("USER"))
                 .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()))
-
-
                 .addFilterBefore(jwtAuthFilter,
                         UsernamePasswordAuthenticationFilter.class);
 
