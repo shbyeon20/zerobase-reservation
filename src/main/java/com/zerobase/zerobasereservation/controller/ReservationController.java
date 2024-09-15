@@ -7,6 +7,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,10 +31,10 @@ public class ReservationController {
 
     @PostMapping("/user/create")
     public ResponseEntity<CreateReservation.Response> createReservation(
-            @RequestBody @Valid CreateReservation.Request request,
-            @RequestHeader("Authorization") String token) {
+            @RequestBody @Valid CreateReservation.Request request) {
 
-        String userId = jwtHandler.getMemberIdFromToken(token);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userId = authentication.getName();
 
         log.info("Post controller start  for  store creation : "+ userId);
 
@@ -52,10 +54,10 @@ public class ReservationController {
      */
     @PostMapping("/partner/list")
     public ResponseEntity<List<GetReservationsByPartner.Response>> getReservationsByUserId(
-            @RequestBody @Valid GetReservationsByPartner.Request request,
-            @RequestHeader("Authorization") String token){
+            @RequestBody @Valid GetReservationsByPartner.Request request){
 
-        String partnerId = jwtHandler.getMemberIdFromToken(token);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String partnerId = authentication.getName();
 
 
         log.info("Get controller start for fetching reservation " +
@@ -77,11 +79,13 @@ public class ReservationController {
 
     @PostMapping("/user/list")
     public ResponseEntity<List<GetReservationsByUser.Response>> getReservationsByUserId(
-            @RequestBody @Valid GetReservationsByUser.Request request,
-            @RequestHeader("Authorization") String token){
+            @RequestBody @Valid GetReservationsByUser.Request request
+            ){
 
 
-        String userId = jwtHandler.getMemberIdFromToken(token);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userId = authentication.getName();
+
 
         log.info("Get controller start for fetching reservation " +
                 "by user : "+userId+" by store "+request.getStoreId());
@@ -107,10 +111,10 @@ public class ReservationController {
 
     @PatchMapping("/partner/accept")
     public ResponseEntity<UpdateStatusReservation.Response> acceptReservation(
-            @RequestBody @Valid  UpdateStatusReservation.Request request,
-            @RequestHeader("Authorization") String token){
+            @RequestBody @Valid  UpdateStatusReservation.Request request){
 
-        String memberId = jwtHandler.getMemberIdFromToken(token);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String memberId = authentication.getName();
 
         log.info("Patch controller start for confirming reservation status " +
                 "using resrvationId : "+request.getReservationId());
@@ -134,11 +138,10 @@ public class ReservationController {
 
     @PatchMapping("partner/reject")
     public ResponseEntity<UpdateStatusReservation.Response> rejectReservation(
-            @RequestBody @Valid  UpdateStatusReservation.Request request,
-            @RequestHeader("Authorization") String token){
+            @RequestBody @Valid  UpdateStatusReservation.Request request){
 
-        String memberId = jwtHandler.getMemberIdFromToken(token);
-
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String memberId = authentication.getName();
 
         log.info("Patch controller start for rejecting reservation status " +
                 "using resrvationId : "+ request.getReservationId());

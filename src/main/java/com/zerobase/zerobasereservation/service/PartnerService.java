@@ -3,11 +3,13 @@ package com.zerobase.zerobasereservation.service;
 import com.zerobase.zerobasereservation.dto.PartnerDto;
 import com.zerobase.zerobasereservation.entity.PartnerEntity;
 import com.zerobase.zerobasereservation.repository.PartnerRepository;
+import com.zerobase.zerobasereservation.type.ROLE;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.management.relation.Role;
 import java.time.LocalDateTime;
 
 @Slf4j
@@ -27,7 +29,7 @@ public class PartnerService {
                                     String businessId, String phoneNumber) {
 
         log.info("Create member with id {}", partnerId);
-        memberAuthService.register(partnerId, password);
+        memberAuthService.register(partnerId, password, ROLE.ROLE_PARTNER);
 
         log.info("Create partner with id {} and name {}", partnerId, partnerName);
 

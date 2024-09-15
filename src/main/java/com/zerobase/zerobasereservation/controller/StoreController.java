@@ -8,6 +8,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,14 +29,14 @@ public class StoreController {
      partner로부터 store 정보를 입력받아서 store record를 생성할것
      */
 
-    @PostMapping("/create")
+    @PostMapping("/partner/create")
     public ResponseEntity<CreateStore.Response> createStore(
-            @RequestBody @Valid CreateStore.Request request,
-            @RequestHeader("Authorization") String token) {
-
-        String memberId = jwtHandler.getMemberIdFromToken(token);
-
+            @RequestBody @Valid CreateStore.Request request) {
         log.info("Post controller start  for  store creation : " );
+
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String memberId = authentication.getName();
 
 
         StoreDto store = storeService.createStore(
@@ -67,7 +69,8 @@ public class StoreController {
             @PathVariable String storeId,
             @RequestHeader("Authorization") String token)
     {
-        String partnerId = jwtHandler.getMemberIdFromToken(token);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String partnerId = authentication.getName();
 
         log.info("Get Controller start for store Info using storeId :" +storeId);
         return ResponseEntity.ok(storeService.findByStoreId(partnerId,storeId));

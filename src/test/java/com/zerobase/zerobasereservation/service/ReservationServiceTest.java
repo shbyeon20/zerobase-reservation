@@ -1,23 +1,33 @@
 package com.zerobase.zerobasereservation.service;
 
 import com.zerobase.zerobasereservation.dto.ReservationDto;
-import com.zerobase.zerobasereservation.entity.*;
+import com.zerobase.zerobasereservation.entity.PartnerEntity;
+import com.zerobase.zerobasereservation.entity.ReservationEntity;
+import com.zerobase.zerobasereservation.entity.StoreEntity;
+import com.zerobase.zerobasereservation.entity.UserEntity;
 import com.zerobase.zerobasereservation.exception.CustomException;
-import com.zerobase.zerobasereservation.repository.*;
+import com.zerobase.zerobasereservation.repository.ReservationRepository;
+import com.zerobase.zerobasereservation.repository.StoreRepository;
+import com.zerobase.zerobasereservation.repository.UserRepository;
 import com.zerobase.zerobasereservation.type.ErrorCode;
 import com.zerobase.zerobasereservation.type.ReservationStatus;
-import org.apache.catalina.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
+@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 class ReservationServiceTest {
 

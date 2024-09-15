@@ -18,9 +18,8 @@ public class CreateStore {
 
 
         @Size(min=1,max=10)
-        private String storeId;
-
         @NotNull
+        private String storeId;
         private String address;
         private String storeComment;
 

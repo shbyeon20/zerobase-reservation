@@ -36,21 +36,25 @@ public class JwtAuthFilter extends OncePerRequestFilter {
      생성
 
      */
+        log.info("JWT Filter started with request headers : "+ request.getHeaderNames());
         String REQUEST_HEADER = "Authorization";
-        String authorization = request.getHeader(REQUEST_HEADER);
+        String authHeaderToken = request.getHeader(REQUEST_HEADER);
         String token="";
 
         String REQUEST_PREFIX = "Bearer ";
 
-        log.info("authorization filter started");
+        log.info("awtAuthFilter : authToken filter started with token : "+authHeaderToken);
 
-        if (StringUtils.hasText(authorization) && authorization.startsWith(REQUEST_PREFIX)) {
-            token = authorization.substring(REQUEST_PREFIX.length());
+        if (StringUtils.hasText(authHeaderToken) && authHeaderToken.startsWith(REQUEST_PREFIX)) {
+            token = authHeaderToken.substring(REQUEST_PREFIX.length());
+            log.info("awtAuthFilter : token parsed : "+ token);
         }
-        if(!ObjectUtils.isEmpty(token)&jwtHandler.validateToken(token)){
+        if((!ObjectUtils.isEmpty(token)&&jwtHandler.validateToken(token))){
             Authentication authentication = this.getJwtAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
+            log.info("JwtAuthFilter: SecurityContextHolder set with Authentication");
         }
+        log.info("authToken filter finished");
         filterChain.doFilter(request, response);
 
 

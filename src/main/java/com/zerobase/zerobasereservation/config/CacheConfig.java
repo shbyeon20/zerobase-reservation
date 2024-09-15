@@ -8,6 +8,7 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 
+/*
 @RequiredArgsConstructor
 public class CacheConfig {
 
@@ -28,3 +29,4 @@ public class CacheConfig {
 
 
 }
+*/

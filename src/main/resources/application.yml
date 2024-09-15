@@ -25,7 +25,8 @@ spring:
       port: 6379
 
   jwt:
-    secret : "c2VlX2hvd19wcm91ZGx5X0lfaGF2ZV9iZWVuX2RvaW5nX3NvX2Zhcgo="
+    secret : "c2VlX2hvd19wcm91ZGx5X0lfaGF2ZV9iZWVuX2RvaW5nX3NvX2Zhcgo=c3JwaW5nU2VjdXJpdHlQcm9qZWN0X0J5ZW9uU2FuZ0h3YV9KYXZhU3ByaW5nTXlzcWwK"
+
 
 logging:
     level:

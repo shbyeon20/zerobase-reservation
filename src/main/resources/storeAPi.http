@@ -1,9 +1,9 @@
 ### Send POST request with json body
-POST http://localhost:8080/stores
+POST http://localhost:8080/store/partner/create
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9QQVJUTkVSIn1dfQ.8JJw82ubv8uaavYGpLHRhb1Rhao_tnbzmWksoKLyZZhmYyS3q4HIC3gekXrtAmMMwg6v7i0y5StUf1FTYUgo2w
 
 {
-  "partnerId": "bsh6226",
   "storeId" : "투썸플레이스동대문",
   "address": "서울시동대문구용두동",
   "storeComment" : "청결한 매장"
@@ -11,7 +11,7 @@ Content-Type: application/json
 }
 
 ### Send POST request with json body
-POST http://localhost:8080/stores
+POST http://localhost:8080/store
 Content-Type: application/json
 
 {
@@ -20,7 +20,6 @@ Content-Type: application/json
   "address": "서울시동대문구용두동",
   "storeComment" : "청결한 매장"
 }
-
 
 
 ### GET request with a

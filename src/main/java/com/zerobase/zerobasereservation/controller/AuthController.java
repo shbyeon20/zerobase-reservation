@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -86,7 +85,7 @@ public class AuthController {
      */
     @PostMapping("/sign-in")
     public ResponseEntity<String> signIn(
-            @RequestBody @Validated SignAuth.SignIn signIn) {
+            @RequestBody @Valid SignAuth.SignIn signIn) {
 
         UserDetails userDetails = memberAuthService
                 .authenticate(signIn.getId(), signIn.getPassword());

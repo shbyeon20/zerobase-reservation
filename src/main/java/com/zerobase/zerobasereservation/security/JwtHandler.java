@@ -42,20 +42,15 @@ public class JwtHandler {
         customClaims.put(KEY_ROLES,role);
 
         return Jwts.builder()
+                .setClaims(customClaims)
                 .setSubject(userId)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime()+TIME_TOKEN_EXPIRE_TIME))
                 .signWith( SecretKeyObject,SignatureAlgorithm.HS512)
-                .setClaims(customClaims)
                 .compact();
     }
 
 
-    public String getMemberIdFromToken(String token) {
-        log.info("get username from token : " + token);
-        Claims claims = this.parseClaimsFromToken(token);
-        return claims.getSubject();
-    }
 
     private Claims parseClaimsFromToken(String token) {
 
@@ -83,16 +78,13 @@ public class JwtHandler {
         Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
 
         Claims claims = this.parseClaimsFromToken(token);
-        return claims.getExpiration().before(new Date());
+        return claims.getExpiration().after(new Date());
     }
 
 
-
-
-
-
-
-
-
+    public String getMemberIdFromToken(String jwt) {
+        Claims claims = this.parseClaimsFromToken(jwt);
+        return claims.getSubject();
+    }
 }
 

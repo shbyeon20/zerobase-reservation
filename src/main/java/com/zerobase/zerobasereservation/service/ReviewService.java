@@ -38,7 +38,8 @@ public class ReviewService {
     그 후 review의 store의 rating도 같이 업데이트 하기
      */
 
-    @PreAuthorize("#userId == authentication.principal.id")
+    @PreAuthorize("#userId == authentication.principal" +
+            ".memberId")
     public ReviewDto createReview(String userId, Integer rating, String reservationId, String reviewContents) {
         log.info("Creating review for user {} and reservation {}", userId, reservationId);
 
@@ -79,7 +80,7 @@ public class ReviewService {
     그 후 review의 store의 rating도 같이 업데이트 하기
      */
 
-    @PreAuthorize("#userId == authentication.principal.id")
+    @PreAuthorize("#userId == authentication.principal.memberId")
     public ReviewDto updateReview(String userId, String reviewId,
                                   Integer rating, String reviewContents) {
         log.info("Updating review for reviewId: {}", reviewId);
@@ -116,7 +117,7 @@ public class ReviewService {
      */
 
 
-    @PreAuthorize("#memberId == authentication.principal.id")
+    @PreAuthorize("#memberId == authentication.principal.memberId")
     public ReviewDto deleteReview(String memberId, String reviewId) {
         log.info("Setting review status to DELETED for reviewId: {}", reviewId);
 
@@ -124,9 +125,8 @@ public class ReviewService {
                 () -> new CustomException(ErrorCode.REVIEW_NOT_FOUND)
         );
 
-        if(!Objects.equals(reviewEntity.getUserEntity().getUserId(), memberId)
-                || !Objects.equals(reviewEntity.getStoreEntity()
-                .getPartnerEntity().getPartnerId(), memberId)){
+        if(!(Objects.equals(reviewEntity.getUserEntity().getUserId(), memberId)
+                || Objects.equals(reviewEntity.getStoreEntity().getPartnerEntity().getPartnerId(), memberId))){
             throw new CustomException(ErrorCode.MEMBERID_REVIEWUSER_UNMATCHED);
         }
 

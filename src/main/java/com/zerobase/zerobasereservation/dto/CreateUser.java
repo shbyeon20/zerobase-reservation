@@ -1,6 +1,7 @@
 package com.zerobase.zerobasereservation.dto;
 
 
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -15,13 +16,16 @@ public class CreateUser {
     @Getter @Setter
     @AllArgsConstructor
     public static class Request {
+        @NotNull
         @Size(min=3,max=10)
         private String userId;
+        @NotNull
         @Size(min=3,max=10)
         private String password;
+        @NotNull
         @Size(min=3,max=10)
         private String userName;
-
+        @NotNull
         @Pattern(regexp = "^010\\d{8}$", message = "Phone number must start with 010 and be followed by 8 digits.")
         private String phoneNumber;
 

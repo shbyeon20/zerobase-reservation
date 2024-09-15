@@ -10,6 +10,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -27,10 +29,10 @@ public class ReviewController {
      */
     @PostMapping("/user/create")
     public ResponseEntity<CreateReview.Response> createReview(
-            @RequestBody @Valid CreateReview.Request request,
-            @RequestHeader("Authorization") String token) {
+            @RequestBody @Valid CreateReview.Request request) {
 
-        String memberId = jwtHandler.getMemberIdFromToken(token);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String memberId = authentication.getName();
 
         log.info("Post controller start  for  review creation : {}", request.getReservationId());
 
@@ -50,10 +52,11 @@ public class ReviewController {
 
     @PatchMapping("/user/revise")
     public ResponseEntity<UpdateReview.Response> updateReview(
-            @RequestBody @Valid UpdateReview.Request request,
-            @RequestHeader("Authorization") String token) {
+            @RequestBody @Valid UpdateReview.Request request
+            ) {
 
-        String memberId = jwtHandler.getMemberIdFromToken(token);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String memberId = authentication.getName();
 
         log.info("Review update request received for reviewId: {}", request.getReviewId());
         ReviewDto reviewDto = reviewService.updateReview(

@@ -4,6 +4,7 @@ import com.zerobase.zerobasereservation.entity.MemberDetails;
 import com.zerobase.zerobasereservation.exception.CustomException;
 import com.zerobase.zerobasereservation.repository.MemberRepository;
 import com.zerobase.zerobasereservation.type.ErrorCode;
+import com.zerobase.zerobasereservation.type.ROLE;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -47,7 +48,7 @@ class MemberAuthServiceTest {
                 .willReturn(encodedPassword);
 
         //when
-        memberAuthService.register(memberId, password);
+        memberAuthService.register(memberId, password,any(ROLE.class));
 
         //then
         ArgumentCaptor<MemberDetails> captor = ArgumentCaptor.forClass(MemberDetails.class);
@@ -68,7 +69,7 @@ class MemberAuthServiceTest {
                 .willReturn(true);
         // when
         CustomException exception = assertThrows(CustomException.class, () -> {
-            memberAuthService.register(memberId, password);
+            memberAuthService.register(memberId, password,any(ROLE.class));
         });
 
 

@@ -27,7 +27,7 @@ public class StoreService {
     private final PartnerRepository partnerRepository;
     private final ReviewRepository reviewRepository;
 
-    @PreAuthorize("#partnerId == authentication.principal.id")
+    @PreAuthorize("#partnerId == authentication.principal.memberId")
     public StoreDto createStore(String partnerId, String storeId,
                                 String address, String storeComment) {
         log.info("store creation service start");
@@ -53,7 +53,7 @@ public class StoreService {
 
     }
 
-    @PreAuthorize("#partnerId == authentication.principal.id")
+    @PreAuthorize("#partnerId == authentication.principal.memberId")
     public List<StoreDto> findByPartnerId(String partnerId) {
         log.info("find Store using partnerID :"+partnerId);
         PartnerEntity partnerEntity = partnerRepository.findBypartnerId(partnerId)
@@ -69,7 +69,7 @@ public class StoreService {
     storeId로 등록된 매장레코드를 조회하여 매장에 관한 정보를 Web으로 반환함
      */
 
-    @PreAuthorize("#partnerId == authentication.principal.id")
+    @PreAuthorize("#partnerId == authentication.principal.memberId")
     public StoreDto findByStoreId(String partnerId, String storeId) {
         log.info("find Store using storeID :"+storeId);
 

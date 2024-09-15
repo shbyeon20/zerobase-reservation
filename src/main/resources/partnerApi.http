@@ -1,21 +1,5 @@
 ### Send POST request with json body
-POST http://localhost:8080/partners
+GET http://localhost:8080//partner/bsh6226/search
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9QQVJUTkVSIn1dfQ.8JJw82ubv8uaavYGpLHRhb1Rhao_tnbzmWksoKLyZZhmYyS3q4HIC3gekXrtAmMMwg6v7i0y5StUf1FTYUgo2w
 
-{
-  "partnerId": "bsh6226",
-  "partnerName" : "변상화",
-  "businessId": 1234567890,
-  "phoneNumber" : "01041589332"
-}
-
-### Send POST request with json body
-POST http://localhost:8080/partners
-Content-Type: application/json
-
-{
-  "partnerId": "jjh6226",
-  "partnerName" : "조정해",
-  "businessId": 1234567890,
-  "phoneNumber" : "01041589332"
-}

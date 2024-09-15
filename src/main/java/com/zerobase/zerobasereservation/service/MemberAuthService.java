@@ -4,6 +4,7 @@ import com.zerobase.zerobasereservation.entity.MemberDetails;
 import com.zerobase.zerobasereservation.exception.CustomException;
 import com.zerobase.zerobasereservation.repository.MemberRepository;
 import com.zerobase.zerobasereservation.type.ErrorCode;
+import com.zerobase.zerobasereservation.type.ROLE;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -13,6 +14,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.management.relation.Role;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +35,7 @@ public class MemberAuthService implements UserDetailsService {
     pw를 encoding하여 db에 저장함
      */
     @Transactional
-    public void register(String memberId, String password){
+    public void register(String memberId, String password, ROLE role){
         if(memberRepository.existsByMemberId(memberId)){
             throw new CustomException(ErrorCode.MEMBERID_DUPLICATE);
         }
@@ -40,6 +43,7 @@ public class MemberAuthService implements UserDetailsService {
         memberRepository.save(
                 MemberDetails.builder()
                         .memberId(memberId)
+                        .role(role)
                         .password(passwordEncoder.encode(password))
                         .build());
     }
