@@ -124,7 +124,7 @@ public class ReviewService {
         ReviewEntity reviewEntity = reviewRepository.findByReviewID(reviewId).orElseThrow(
                 () -> new CustomException(ErrorCode.REVIEW_NOT_FOUND)
         );
-
+// Todo : N+1문제이므로 Fetch with JPQL or QueryDSL 할것.
         if(!(Objects.equals(reviewEntity.getUserEntity().getUserId(), memberId)
                 || Objects.equals(reviewEntity.getStoreEntity().getPartnerEntity().getPartnerId(), memberId))){
             throw new CustomException(ErrorCode.MEMBERID_REVIEWUSER_UNMATCHED);
