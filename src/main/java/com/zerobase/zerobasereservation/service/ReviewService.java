@@ -51,14 +51,14 @@ public class ReviewService {
             throw new CustomException(ErrorCode.USERID_REVIEWUSER_UNMATCHED);
         }
 
-        UserEntity userEntity = userRepository.findByuserId(userId).orElseThrow(
+        UserEntity userEntity = userRepository.findByUserId(userId).orElseThrow(
                 () -> new CustomException(ErrorCode.USERID_NONEXISTENT)
         );
 
         StoreEntity storeEntity = reservationEntity.getStoreEntity();
 
         ReviewEntity reviewEntity = reviewRepository.save(ReviewEntity.builder()
-                .reviewID(UUID.randomUUID().toString())
+                .reviewId(UUID.randomUUID().toString())
                 .reservationEntity(reservationEntity)
                 .userEntity(userEntity)
                 .storeEntity(storeEntity)
@@ -85,7 +85,7 @@ public class ReviewService {
                                   Integer rating, String reviewContents) {
         log.info("Updating review for reviewId: {}", reviewId);
 
-        ReviewEntity reviewEntity = reviewRepository.findByReviewID(reviewId).orElseThrow(
+        ReviewEntity reviewEntity = reviewRepository.findByReviewId(reviewId).orElseThrow(
                 () -> new CustomException(ErrorCode.REVIEW_NOT_FOUND));
 
 
@@ -121,7 +121,7 @@ public class ReviewService {
     public ReviewDto deleteReview(String memberId, String reviewId) {
         log.info("Setting review status to DELETED for reviewId: {}", reviewId);
 
-        ReviewEntity reviewEntity = reviewRepository.findByReviewID(reviewId).orElseThrow(
+        ReviewEntity reviewEntity = reviewRepository.findByReviewId(reviewId).orElseThrow(
                 () -> new CustomException(ErrorCode.REVIEW_NOT_FOUND)
         );
 // Todo : N+1문제이므로 Fetch with JPQL or QueryDSL 할것.

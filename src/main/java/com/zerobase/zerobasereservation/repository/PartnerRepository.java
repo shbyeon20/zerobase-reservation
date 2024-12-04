@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface PartnerRepository extends JpaRepository<PartnerEntity, Long > {
-    Optional<PartnerEntity> findBypartnerId(String partnerId);
+    Optional<PartnerEntity> findByPartnerId(String partnerId);
 }

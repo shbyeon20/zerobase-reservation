@@ -64,10 +64,10 @@ class ReservationServiceTest {
                 .storeId(storeId)
                 .build();
 
-        given(userRepository.findByuserId(userId))
+        given(userRepository.findByUserId(userId))
                 .willReturn(Optional.of(userEntity));
 
-        given(storeRepository.findBystoreId(storeId))
+        given(storeRepository.findByStoreId(storeId))
                 .willReturn(Optional.of(storeEntity));
 
 
@@ -108,8 +108,8 @@ class ReservationServiceTest {
         assertEquals(reservationTime, capturedReservation.getReservationTime());
 
         // Verify that the userRepository and storeRepository methods are called with the correct parameters
-        verify(userRepository, times(1)).findByuserId(userId);
-        verify(storeRepository, times(1)).findBystoreId(storeId);
+        verify(userRepository, times(1)).findByUserId(userId);
+        verify(storeRepository, times(1)).findByStoreId(storeId);
     }
 
     @Test
@@ -119,7 +119,7 @@ class ReservationServiceTest {
         String storeId = "store123";
         LocalDateTime reservationTime = LocalDateTime.now().plusDays(1);
 
-        given(userRepository.findByuserId(userId))
+        given(userRepository.findByUserId(userId))
                 .willReturn(Optional.empty());
 
         // When
@@ -148,10 +148,10 @@ class ReservationServiceTest {
                 .phoneNumber("1234567890")
                 .build();
 
-        given(userRepository.findByuserId(userId))
+        given(userRepository.findByUserId(userId))
                 .willReturn(Optional.of(userEntity));
 
-        given(storeRepository.findBystoreId(storeId))
+        given(storeRepository.findByStoreId(storeId))
                 .willReturn(Optional.empty());
 
         // When
@@ -226,7 +226,7 @@ class ReservationServiceTest {
 
         UserEntity userEntity = mock(UserEntity.class);
 
-        given(storeRepository.findBystoreId(storeId))
+        given(storeRepository.findByStoreId(storeId))
                 .willReturn(Optional.of(storeEntity));
 
         ReservationEntity reservation1 = ReservationEntity.builder()
@@ -267,7 +267,7 @@ class ReservationServiceTest {
         String partnerId = "partner123";
         String storeId = "store123";
 
-        given(storeRepository.findBystoreId(storeId))
+        given(storeRepository.findByStoreId(storeId))
                 .willReturn(Optional.empty());
 
         // When
@@ -294,7 +294,7 @@ class ReservationServiceTest {
                 .partnerEntity(otherPartner)
                 .build();
 
-        given(storeRepository.findBystoreId(storeId))
+        given(storeRepository.findByStoreId(storeId))
                 .willReturn(Optional.of(storeEntity));
 
         // When

@@ -26,7 +26,7 @@ public class PartnerService {
      */
 
     public PartnerDto createPartner(String partnerId, String password, String partnerName,
-                                    String businessId, String phoneNumber) {
+                                    long businessId, long phoneNumber) {
 
         log.info("Create member with id {}", partnerId);
         memberAuthService.register(partnerId, password, ROLE.ROLE_PARTNER);

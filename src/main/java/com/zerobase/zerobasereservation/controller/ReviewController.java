@@ -3,7 +3,7 @@ package com.zerobase.zerobasereservation.controller;
 import com.zerobase.zerobasereservation.dto.CreateReview;
 import com.zerobase.zerobasereservation.dto.DeleteReview;
 import com.zerobase.zerobasereservation.dto.ReviewDto;
-import com.zerobase.zerobasereservation.exception.UpdateReview;
+import com.zerobase.zerobasereservation.dto.UpdateReview;
 import com.zerobase.zerobasereservation.security.JwtHandler;
 import com.zerobase.zerobasereservation.service.ReviewService;
 import jakarta.validation.Valid;

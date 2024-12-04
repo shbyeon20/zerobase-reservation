@@ -27,7 +27,7 @@ public class CreateUser {
         private String userName;
         @NotNull
         @Pattern(regexp = "^010\\d{8}$", message = "Phone number must start with 010 and be followed by 8 digits.")
-        private String phoneNumber;
+        private long phoneNumber;
 
         private Long registeredAt;
 

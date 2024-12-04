@@ -34,7 +34,7 @@ public class StoreService {
         log.info("Find by partnerId for partnerEntity :" +partnerId  );
 
         PartnerEntity partnerEntity =
-                partnerRepository.findBypartnerId(partnerId)
+                partnerRepository.findByPartnerId(partnerId)
                         .orElseThrow(() -> new CustomException(ErrorCode.PARTNERID_NONEXISTENT));
 
 
@@ -56,7 +56,7 @@ public class StoreService {
     @PreAuthorize("#partnerId == authentication.principal.memberId")
     public List<StoreDto> findByPartnerId(String partnerId) {
         log.info("find Store using partnerID :"+partnerId);
-        PartnerEntity partnerEntity = partnerRepository.findBypartnerId(partnerId)
+        PartnerEntity partnerEntity = partnerRepository.findByPartnerId(partnerId)
                         .orElseThrow(() -> new CustomException(ErrorCode.PARTNERID_NONEXISTENT));
         List<StoreEntity> storeEntities =
                 storeRepository.findAllByPartnerEntity(partnerEntity);
@@ -73,7 +73,7 @@ public class StoreService {
     public StoreDto findByStoreId(String partnerId, String storeId) {
         log.info("find Store using storeID :"+storeId);
 
-        StoreEntity storeEntity = storeRepository.findBystoreId(storeId)
+        StoreEntity storeEntity = storeRepository.findByStoreId(storeId)
                 .orElseThrow(() -> new CustomException(ErrorCode.STOREID_NONEXISTENT));
 
         if(!Objects.equals(storeEntity.getPartnerEntity().getPartnerId(), partnerId)) {

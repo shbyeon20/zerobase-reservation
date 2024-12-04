@@ -44,12 +44,12 @@ public class ReservationService {
         log.info("Creating reservation for user {} and store {}", userId, storeId);
 
         UserEntity userEntity =
-                userRepository.findByuserId(userId).orElseThrow
+                userRepository.findByUserId(userId).orElseThrow
                         (() -> new CustomException(ErrorCode.USERID_NONEXISTENT,
                                 "partnerId not existing : " + userId));
 
         StoreEntity storeEntity =
-                storeRepository.findBystoreId(storeId).orElseThrow
+                storeRepository.findByStoreId(storeId).orElseThrow
                         (() -> new CustomException(ErrorCode.STOREID_NONEXISTENT
                                 , "partnerId not existing : " + storeId));
 
@@ -97,7 +97,7 @@ public class ReservationService {
             (String partnerId, String storeId) {
         log.info("Retrieving reservations for partner {}", storeId);
 
-        StoreEntity storeEntity = storeRepository.findBystoreId(storeId)
+        StoreEntity storeEntity = storeRepository.findByStoreId(storeId)
                 .orElseThrow(() -> new CustomException(ErrorCode.STOREID_NONEXISTENT));
 
         if(!Objects.equals(storeEntity.getPartnerEntity().getPartnerId(), partnerId)){

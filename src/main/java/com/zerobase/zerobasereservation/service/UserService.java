@@ -23,7 +23,7 @@ public class UserService {
      */
 
     public UserDto createUser(String userId, String password,
-                              String userName, String phoneNumber) {
+                              String userName, long phoneNumber) {
 
         log.info("Create member with id {}", userId);
         memberAuthService.register(userId, password, ROLE.ROLE_USER);
@@ -34,7 +34,7 @@ public class UserService {
                         .userId(userId)
                         .userName(userName)
                         .phoneNumber(phoneNumber)
-                        .registrationDate(LocalDateTime.now())
+                        .registeredAt(LocalDateTime.now())
                         .build()
         );
         log.info("createUser service layer started : "+userEntity.getUserId());

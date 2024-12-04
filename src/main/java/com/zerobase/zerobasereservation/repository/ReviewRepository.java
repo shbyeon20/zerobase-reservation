@@ -12,7 +12,7 @@ import java.util.Optional;
 @Repository
 public interface ReviewRepository extends JpaRepository<ReviewEntity, Long >
 {
-    Optional<ReviewEntity> findByReviewID(String reviewId);
+    Optional<ReviewEntity> findByReviewId(String reviewId);
 
     // Custom query to calculate the average rating for a specific store
     @Query("SELECT ROUND(AVG(r.rating), 1) FROM ReviewEntity r WHERE " +

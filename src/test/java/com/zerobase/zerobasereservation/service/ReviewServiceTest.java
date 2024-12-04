@@ -77,7 +77,7 @@ class ReviewServiceTest {
         given(reservationRepository.findByReservationId(anyString()))
                 .willReturn(Optional.of(reservationEntity));
 
-        given(userRepository.findByuserId(anyString()))
+        given(userRepository.findByUserId(anyString()))
                 .willReturn(Optional.of(userEntity));
 
         given(reviewRepository.save(any(ReviewEntity.class)))
@@ -97,7 +97,7 @@ class ReviewServiceTest {
         assertEquals(reviewContent, review.getReviewContents());
 
         // Verify that the repositories are called correctly
-        verify(userRepository, times(1)).findByuserId(userId);
+        verify(userRepository, times(1)).findByUserId(userId);
         verify(reservationRepository, times(1)).findByReservationId(reservationId);
         verify(reviewRepository, times(1)).save(any(ReviewEntity.class));
         verify(storeService, times(1)).updateRating(any(StoreEntity.class));
@@ -128,9 +128,9 @@ class ReviewServiceTest {
 
         assertEquals(customException.getErrorCode(), ErrorCode.RESERVATION_ID_NONEXISTENT);
         verify(reservationRepository, times(1)).findByReservationId(anyString());
-        verify(userRepository, times(0)).findByuserId(anyString());
+        verify(userRepository, times(0)).findByUserId(anyString());
         verify(reviewRepository, times(0)).save(any(ReviewEntity.class));
-        verify(userRepository, never()).findByuserId(anyString());
+        verify(userRepository, never()).findByUserId(anyString());
         verify(reviewRepository, never()).save(any(ReviewEntity.class));
 
 
@@ -159,7 +159,7 @@ class ReviewServiceTest {
         given(reservationRepository.findByReservationId(reservationId))
                 .willReturn(Optional.of(reservationEntity));
 
-        given(userRepository.findByuserId(userId))
+        given(userRepository.findByUserId(userId))
                 .willReturn(Optional.empty());
 
         // When
@@ -169,7 +169,7 @@ class ReviewServiceTest {
 
         // Then
         assertEquals(ErrorCode.USERID_NONEXISTENT, exception.getErrorCode());
-        verify(userRepository, times(1)).findByuserId(userId);
+        verify(userRepository, times(1)).findByUserId(userId);
         verify(reviewRepository, never()).save(any(ReviewEntity.class));
     }
 
@@ -212,7 +212,7 @@ class ReviewServiceTest {
 
         // Then
         assertEquals(ErrorCode.USERID_REVIEWUSER_UNMATCHED, exception.getErrorCode());
-        verify(userRepository, never()).findByuserId(userId);
+        verify(userRepository, never()).findByUserId(userId);
         verify(reviewRepository, never()).save(any(ReviewEntity.class));
     }
 
@@ -246,7 +246,7 @@ class ReviewServiceTest {
                 .build();
 
         // Mocking methods
-        given(reviewRepository.findByReviewID(reviewId))
+        given(reviewRepository.findByReviewId(reviewId))
                 .willReturn(Optional.of(existingReviewEntity));
 
         given(reviewRepository.save(any(ReviewEntity.class)))
@@ -262,7 +262,7 @@ class ReviewServiceTest {
         assertEquals(newReviewContents, result.getReviewContents());
 
         // Verify interactions
-        verify(reviewRepository, times(1)).findByReviewID(reviewId);
+        verify(reviewRepository, times(1)).findByReviewId(reviewId);
         verify(reviewRepository, times(1)).save(existingReviewEntity);
         verify(storeService, times(1)).updateRating(storeEntity);
     }
@@ -276,7 +276,7 @@ class ReviewServiceTest {
         String newReviewContents = "Updated review content";
 
         // Mocking methods
-        given(reviewRepository.findByReviewID(reviewId))
+        given(reviewRepository.findByReviewId(reviewId))
                 .willReturn(Optional.empty());
 
         // When
@@ -286,7 +286,7 @@ class ReviewServiceTest {
 
         // Then
         assertEquals(ErrorCode.REVIEW_NOT_FOUND, exception.getErrorCode());
-        verify(reviewRepository, times(1)).findByReviewID(reviewId);
+        verify(reviewRepository, times(1)).findByReviewId(reviewId);
         verify(reviewRepository, never()).save(any(ReviewEntity.class));
         verify(storeService, never()).updateRating(any(StoreEntity.class));
     }
@@ -319,7 +319,7 @@ class ReviewServiceTest {
                 .build();
 
         // Mocking methods
-        given(reviewRepository.findByReviewID(reviewId))
+        given(reviewRepository.findByReviewId(reviewId))
                 .willReturn(Optional.of(existingReviewEntity));
 
         // When
@@ -329,7 +329,7 @@ class ReviewServiceTest {
 
         // Then
         assertEquals(ErrorCode.USERID_REVIEWUSER_UNMATCHED, exception.getErrorCode());
-        verify(reviewRepository, times(1)).findByReviewID(reviewId);
+        verify(reviewRepository, times(1)).findByReviewId(reviewId);
         verify(reviewRepository, never()).save(any(ReviewEntity.class));
         verify(storeService, never()).updateRating(any(StoreEntity.class));
     }
@@ -377,7 +377,7 @@ class ReviewServiceTest {
                 .build();
 
         // Mocking methods
-        given(reviewRepository.findByReviewID(reviewId))
+        given(reviewRepository.findByReviewId(reviewId))
                 .willReturn(Optional.of(existingReviewEntity));
 
         given(reviewRepository.save(any(ReviewEntity.class)))
@@ -391,7 +391,7 @@ class ReviewServiceTest {
         assertEquals(ReviewStatus.DELETED, result.getStatus());
 
         // Verify interactions
-        verify(reviewRepository, times(1)).findByReviewID(reviewId);
+        verify(reviewRepository, times(1)).findByReviewId(reviewId);
         verify(reviewRepository, times(1)).save(existingReviewEntity);
         verify(storeService, times(1)).updateRating(storeEntity);
     }
@@ -403,7 +403,7 @@ class ReviewServiceTest {
         String reviewId = "review456";
 
         // Mocking methods
-        given(reviewRepository.findByReviewID(reviewId))
+        given(reviewRepository.findByReviewId(reviewId))
                 .willReturn(Optional.empty());
 
         // When
@@ -413,7 +413,7 @@ class ReviewServiceTest {
 
         // Then
         assertEquals(ErrorCode.REVIEW_NOT_FOUND, exception.getErrorCode());
-        verify(reviewRepository, times(1)).findByReviewID(reviewId);
+        verify(reviewRepository, times(1)).findByReviewId(reviewId);
         verify(reviewRepository, never()).save(any(ReviewEntity.class));
         verify(storeService, never()).updateRating(any(StoreEntity.class));
     }
@@ -447,7 +447,7 @@ class ReviewServiceTest {
                 .build();
 
         // Mocking methods
-        given(reviewRepository.findByReviewID(reviewId))
+        given(reviewRepository.findByReviewId(reviewId))
                 .willReturn(Optional.of(existingReviewEntity));
 
         // When
@@ -457,7 +457,7 @@ class ReviewServiceTest {
 
         // Then
         assertEquals(ErrorCode.MEMBERID_REVIEWUSER_UNMATCHED, exception.getErrorCode());
-        verify(reviewRepository, times(1)).findByReviewID(reviewId);
+        verify(reviewRepository, times(1)).findByReviewId(reviewId);
         verify(reviewRepository, never()).save(any(ReviewEntity.class));
         verify(storeService, never()).updateRating(any(StoreEntity.class));
     }
@@ -491,7 +491,7 @@ class ReviewServiceTest {
                 .build();
 
         // Mocking methods
-        given(reviewRepository.findByReviewID(reviewId))
+        given(reviewRepository.findByReviewId(reviewId))
                 .willReturn(Optional.of(existingReviewEntity));
 
         // When
@@ -501,7 +501,7 @@ class ReviewServiceTest {
 
         // Then
         assertEquals(ErrorCode.MEMBERID_REVIEWUSER_UNMATCHED, exception.getErrorCode());
-        verify(reviewRepository, times(1)).findByReviewID(reviewId);
+        verify(reviewRepository, times(1)).findByReviewId(reviewId);
         verify(reviewRepository, never()).save(any(ReviewEntity.class));
         verify(storeService, never()).updateRating(any(StoreEntity.class));
     }
@@ -547,7 +547,7 @@ class ReviewServiceTest {
         // Then
         assertEquals(ErrorCode.USERID_REVIEWUSER_UNMATCHED, exception.getErrorCode());
         verify(reservationRepository, times(1)).findByReservationId(reservationId);
-        verify(userRepository, never()).findByuserId(userId);
+        verify(userRepository, never()).findByUserId(userId);
         verify(reviewRepository, never()).save(any(ReviewEntity.class));
     }
 }

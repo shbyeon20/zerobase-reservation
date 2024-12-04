@@ -27,10 +27,9 @@ public class CreatePartner {
         private String partnerName;
         @Size(min=10,max=10)
         @NotNull
-        private String businessId;
+        private long businessId;
         @NotNull
-        @Pattern(regexp = "^010\\d{8}$", message = "Phone number must start with 010 and be followed by 8 digits.")
-        private String PhoneNumber;
+        private long PhoneNumber;
 
     }
 

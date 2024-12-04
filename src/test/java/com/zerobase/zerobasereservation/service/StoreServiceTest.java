@@ -2,7 +2,6 @@ package com.zerobase.zerobasereservation.service;
 
 import com.zerobase.zerobasereservation.dto.StoreDto;
 import com.zerobase.zerobasereservation.entity.PartnerEntity;
-import com.zerobase.zerobasereservation.entity.ReviewEntity;
 import com.zerobase.zerobasereservation.entity.StoreEntity;
 import com.zerobase.zerobasereservation.exception.CustomException;
 import com.zerobase.zerobasereservation.repository.PartnerRepository;
@@ -63,7 +62,7 @@ class StoreServiceTest {
         String address = "123 Main St";
         String storeComment = "Test Store";
 
-        given(partnerRepository.findBypartnerId(partnerId))
+        given(partnerRepository.findByPartnerId(partnerId))
                 .willReturn(Optional.of(partnerEntity));
 
         given(storeRepository.save(any(StoreEntity.class)))
@@ -73,7 +72,7 @@ class StoreServiceTest {
         StoreDto result = storeService.createStore(partnerId, storeId, address, storeComment);
 
         // Then
-        then(partnerRepository).should().findBypartnerId(partnerId);
+        then(partnerRepository).should().findByPartnerId(partnerId);
         then(storeRepository).should().save(any(StoreEntity.class));
 
         assertEquals(storeId, result.getStoreId());
@@ -90,7 +89,7 @@ class StoreServiceTest {
         String address = "123 Main St";
         String storeComment = "Test Store";
 
-        given(partnerRepository.findBypartnerId(partnerId))
+        given(partnerRepository.findByPartnerId(partnerId))
                 .willReturn(Optional.empty());
 
         // When
@@ -108,7 +107,7 @@ class StoreServiceTest {
         String partnerId = "partner123";
         List<StoreEntity> storeEntities = Arrays.asList(storeEntity);
 
-        given(partnerRepository.findBypartnerId(partnerId))
+        given(partnerRepository.findByPartnerId(partnerId))
                 .willReturn(Optional.of(partnerEntity));
 
         given(storeRepository.findAllByPartnerEntity(partnerEntity))
@@ -118,7 +117,7 @@ class StoreServiceTest {
         List<StoreDto> result = storeService.findByPartnerId(partnerId);
 
         // Then
-        then(partnerRepository).should().findBypartnerId(partnerId);
+        then(partnerRepository).should().findByPartnerId(partnerId);
         then(storeRepository).should().findAllByPartnerEntity(partnerEntity);
 
         assertEquals(1, result.size());
@@ -130,7 +129,7 @@ class StoreServiceTest {
         // Given
         String partnerId = "nonexistentPartnerId";
 
-        given(partnerRepository.findBypartnerId(partnerId))
+        given(partnerRepository.findByPartnerId(partnerId))
                 .willReturn(Optional.empty());
 
         // When
@@ -148,14 +147,14 @@ class StoreServiceTest {
         String partnerId = "partner123";
         String storeId = "store123";
 
-        given(storeRepository.findBystoreId(storeId))
+        given(storeRepository.findByStoreId(storeId))
                 .willReturn(Optional.of(storeEntity));
 
         // When
         StoreDto result = storeService.findByStoreId(partnerId, storeId);
 
         // Then
-        then(storeRepository).should().findBystoreId(storeId);
+        then(storeRepository).should().findByStoreId(storeId);
 
         assertEquals(storeId, result.getStoreId());
         assertEquals(partnerId, storeEntity.getPartnerEntity().getPartnerId());
@@ -167,7 +166,7 @@ class StoreServiceTest {
         String partnerId = "partner123";
         String storeId = "nonexistentStoreId";
 
-        given(storeRepository.findBystoreId(storeId))
+        given(storeRepository.findByStoreId(storeId))
                 .willReturn(Optional.empty());
 
         // When
@@ -185,7 +184,7 @@ class StoreServiceTest {
         String partnerId = "otherPartnerId";
         String storeId = "store123";
 
-        given(storeRepository.findBystoreId(storeId))
+        given(storeRepository.findByStoreId(storeId))
                 .willReturn(Optional.of(storeEntity));
 
         // When
