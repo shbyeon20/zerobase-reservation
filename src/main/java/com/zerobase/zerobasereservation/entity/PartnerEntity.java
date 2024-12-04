@@ -15,12 +15,12 @@ public class PartnerEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private long id;
     @Column(unique = true)
     private String partnerId;
     private String partnerName;
-    private String businessId;
-    private String phoneNumber;
+    private long businessId;
+    private long phoneNumber;
 
     private LocalDateTime registeredAt;
 

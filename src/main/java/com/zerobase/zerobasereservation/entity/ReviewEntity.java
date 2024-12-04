@@ -16,8 +16,8 @@ import java.time.LocalDateTime;
 public class ReviewEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
-    String reviewID;
+    long id;
+
     @OneToOne
     ReservationEntity reservationEntity;
     @ManyToOne
@@ -30,7 +30,9 @@ public class ReviewEntity {
             nullable = false)
     StoreEntity storeEntity;
 
-    Integer rating;
+    String reviewId;
+
+    double rating;
 
     String reviewContents;
     @Enumerated(EnumType.STRING)

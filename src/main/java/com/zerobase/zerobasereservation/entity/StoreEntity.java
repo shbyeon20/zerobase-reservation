@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 @Builder
 public class StoreEntity {
     @Id
-    @GeneratedValue
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
 
     @ManyToOne
     @JoinColumn(name = "partnerId", referencedColumnName = "partnerId",
@@ -24,7 +24,7 @@ public class StoreEntity {
     private String storeId;
     private String address;
     private String storeComment;
-    private Double rating;
+    private double rating;
     private LocalDateTime registeredAt;
 
 }

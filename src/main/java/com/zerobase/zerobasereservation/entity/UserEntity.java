@@ -15,10 +15,10 @@ import java.time.LocalDateTime;
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
+    long id;
     @Column(unique = true)
     String userId;
     String userName;
-    String phoneNumber;
-    LocalDateTime registrationDate;
+    long phoneNumber;
+    LocalDateTime registeredAt;
 }

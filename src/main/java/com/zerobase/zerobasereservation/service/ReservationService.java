@@ -149,7 +149,7 @@ public class ReservationService {
 
 
     /*
-    점주가 RESERVED 상태인 reservation을 확인하고 RESERVED상태를 REJECTED상태로 변경하여
+     점주가 RESERVED 상태인 reservation을 확인하고 RESERVED상태를 REJECTED상태로 변경하여
     예약을 확정처리를 하는 절차
      */
 

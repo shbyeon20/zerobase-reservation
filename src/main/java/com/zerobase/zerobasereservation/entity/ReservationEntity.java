@@ -16,14 +16,14 @@ import java.time.LocalDateTime;
 public class ReservationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
+    long id;
     String reservationId;
     @ManyToOne
     @JoinColumn(name = "userId", referencedColumnName = "userId",
             nullable = false)
     UserEntity userEntity;
     @ManyToOne
-    @JoinColumn(name = "storeID", referencedColumnName = "storeID",
+    @JoinColumn(name = "storeId", referencedColumnName = "storeId",
             nullable = false)
     StoreEntity storeEntity;
     ReservationStatus reservationStatus;
