@@ -3,6 +3,7 @@ package com.zerobase.zerobasereservation.service;
 import com.zerobase.zerobasereservation.dto.UserDto;
 import com.zerobase.zerobasereservation.entity.UserEntity;
 import com.zerobase.zerobasereservation.repository.UserRepository;
+import com.zerobase.zerobasereservation.type.ROLE;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -16,16 +17,16 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class UserServiceTest {
+class UserDataManagerTest {
 
     @Mock
     private UserRepository userRepository;
 
     @Mock
-    private MemberAuthService memberAuthService;
+    private UserDetailsImpl userDetailsImpl;
 
     @InjectMocks
-    private UserService userService;
+    private UserDataManager userDataManager;
 
     @Test
     void createUser_ShouldCreateUserSuccessfully() {
@@ -33,24 +34,26 @@ class UserServiceTest {
         String userId = "john_doe";
         String password = "securePassword123";
         String userName = "John Doe";
-        String phoneNumber = "555-1234";
+        long phoneNumber = 5551234L;
+        ROLE role = ROLE.ROLE_USER;
+
 
         UserEntity userEntity = UserEntity.builder()
                 .userId(userId)
                 .userName(userName)
                 .phoneNumber(phoneNumber)
-                .registrationDate(LocalDateTime.now())
+                .registeredAt(LocalDateTime.now())
                 .build();
 
         // Mock the userRepository.save method to return the userEntity
         given(userRepository.save(any(UserEntity.class))).willReturn(userEntity);
 
         // When
-        UserDto result = userService.createUser(userId, password, userName, phoneNumber);
+        UserDto result = userDataManager.createUser(userId, password, userName, phoneNumber);
 
         // Then
         // Verify that memberAuthService.register was called with correct parameters
-        then(memberAuthService).should().register(userId, password);
+        then(userDetailsImpl).should().register(userId, password,role);
 
         // Capture the UserEntity passed to userRepository.save
         ArgumentCaptor<UserEntity> userEntityCaptor = ArgumentCaptor.forClass(UserEntity.class);
@@ -62,7 +65,7 @@ class UserServiceTest {
         assertEquals(userId, capturedUserEntity.getUserId());
         assertEquals(userName, capturedUserEntity.getUserName());
         assertEquals(phoneNumber, capturedUserEntity.getPhoneNumber());
-        assertNotNull(capturedUserEntity.getRegistrationDate());
+        assertNotNull(capturedUserEntity.getRegisteredAt());
 
         // Assert that the result UserDto has the expected values
         assertEquals(userId, result.getUserId());

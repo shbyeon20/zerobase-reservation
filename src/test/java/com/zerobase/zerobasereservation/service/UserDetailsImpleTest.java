@@ -23,7 +23,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class MemberAuthServiceTest {
+class UserDetailsImpleTest {
 
     @Mock
     private MemberRepository memberRepository;
@@ -32,7 +32,7 @@ class MemberAuthServiceTest {
     private PasswordEncoder passwordEncoder;
 
     @InjectMocks
-    private MemberAuthService memberAuthService;
+    private UserDetailsImpl userDetailsImple;
 
 
     @Test
@@ -48,7 +48,7 @@ class MemberAuthServiceTest {
                 .willReturn(encodedPassword);
 
         //when
-        memberAuthService.register(memberId, password,any(ROLE.class));
+        userDetailsImple.register(memberId, password,any(ROLE.class));
 
         //then
         ArgumentCaptor<MemberDetails> captor = ArgumentCaptor.forClass(MemberDetails.class);
@@ -69,7 +69,7 @@ class MemberAuthServiceTest {
                 .willReturn(true);
         // when
         CustomException exception = assertThrows(CustomException.class, () -> {
-            memberAuthService.register(memberId, password,any(ROLE.class));
+            userDetailsImple.register(memberId, password,any(ROLE.class));
         });
 
 
@@ -95,7 +95,7 @@ class MemberAuthServiceTest {
                 .willReturn(true);
 
         // when
-        UserDetails result = memberAuthService.authenticate(memberId, password);
+        UserDetails result = userDetailsImple.authenticate(memberId, password);
 
         // then
         assertNotNull(result);
@@ -122,7 +122,7 @@ class MemberAuthServiceTest {
 
         // when
         BadCredentialsException exception = assertThrows(BadCredentialsException.class, () -> {
-            memberAuthService.authenticate(memberId, password);
+            userDetailsImple.authenticate(memberId, password);
         });
 
         // then
@@ -144,7 +144,7 @@ class MemberAuthServiceTest {
                 .willReturn(Optional.of(memberDetails));
 
         // when
-        UserDetails result = memberAuthService.loadUserByUsername(memberId);
+        UserDetails result = userDetailsImple.loadUserByUsername(memberId);
 
         // then
         assertNotNull(result);
@@ -162,7 +162,7 @@ class MemberAuthServiceTest {
 
         // when
         UsernameNotFoundException exception = assertThrows(UsernameNotFoundException.class, () -> {
-            memberAuthService.loadUserByUsername(memberId);
+            userDetailsImple.loadUserByUsername(memberId);
         });
 
         // then

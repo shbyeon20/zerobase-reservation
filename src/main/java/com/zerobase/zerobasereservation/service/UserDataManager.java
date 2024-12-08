@@ -13,10 +13,10 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UserService {
+public class UserDataManager {
 
     private final UserRepository userRepository;
-    private final MemberAuthService memberAuthService;
+    private final UserDetailsImpl userDetailsImpl;
 
     /*
     memberEntity 와 userEntity 를 생성하고 저장함.
@@ -26,7 +26,7 @@ public class UserService {
                               String userName, long phoneNumber) {
 
         log.info("Create member with id {}", userId);
-        memberAuthService.register(userId, password, ROLE.ROLE_USER);
+        userDetailsImpl.register(userId, password, ROLE.ROLE_USER);
 
         log.info("createUser service layer started : "+userId);
         UserEntity userEntity = userRepository.save(

@@ -9,16 +9,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.management.relation.Role;
 import java.time.LocalDateTime;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class PartnerService {
+public class PartnerDataManager {
     private final PartnerRepository partnerRepository;
-    private final MemberAuthService memberAuthService;
+    private final UserDetailsImpl userDetailsImpl;
 
 
     /*
@@ -29,7 +28,7 @@ public class PartnerService {
                                     long businessId, long phoneNumber) {
 
         log.info("Create member with id {}", partnerId);
-        memberAuthService.register(partnerId, password, ROLE.ROLE_PARTNER);
+        userDetailsImpl.register(partnerId, password, ROLE.ROLE_PARTNER);
 
         log.info("Create partner with id {} and name {}", partnerId, partnerName);
 

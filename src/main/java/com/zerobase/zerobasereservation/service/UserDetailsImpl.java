@@ -13,9 +13,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.management.relation.Role;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +21,7 @@ import javax.management.relation.Role;
 /*
 유저 디테일을 불러오고 저장하는 클래스
  */
-public class MemberAuthService implements UserDetailsService {
+public class UserDetailsImpl implements UserDetailsService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
@@ -34,7 +31,7 @@ public class MemberAuthService implements UserDetailsService {
     유저로부터 Id와 Pw를 받아서 Id중복여부를 확인한 후
     pw를 encoding하여 db에 저장함
      */
-    @Transactional
+
     public void register(String memberId, String password, ROLE role){
         if(memberRepository.existsByMemberId(memberId)){
             throw new CustomException(ErrorCode.MEMBERID_DUPLICATE);
@@ -45,7 +42,8 @@ public class MemberAuthService implements UserDetailsService {
                         .memberId(memberId)
                         .role(role)
                         .password(passwordEncoder.encode(password))
-                        .build());
+                        .build()
+        );
     }
 
     /*
