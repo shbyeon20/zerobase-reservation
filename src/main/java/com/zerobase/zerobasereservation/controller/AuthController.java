@@ -2,15 +2,13 @@ package com.zerobase.zerobasereservation.controller;
 
 
 import com.zerobase.zerobasereservation.dto.*;
-import com.zerobase.zerobasereservation.security.JwtHandler;
-import com.zerobase.zerobasereservation.service.MemberAuthService;
-import com.zerobase.zerobasereservation.service.PartnerService;
-import com.zerobase.zerobasereservation.service.UserService;
+import com.zerobase.zerobasereservation.service.AuthService;
+import com.zerobase.zerobasereservation.service.PartnerDataManager;
+import com.zerobase.zerobasereservation.service.UserDataManager;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,10 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class AuthController {
 
-    private final MemberAuthService memberAuthService;
-    private final JwtHandler jwtHandler;
-    private final UserService userService;
-    private final PartnerService partnerService;
+    private final AuthService authService;
+    private final UserDataManager userDataManager;
+    private final PartnerDataManager partnerDataManager;
 
 
     /*
@@ -42,7 +39,7 @@ public class AuthController {
 
 
 
-        PartnerDto partnerDto = partnerService.createPartner
+        PartnerDto partnerDto = partnerDataManager.createPartner
                 (       request.getPartnerId(),
                         request.getPassword(),
                         request.getPartnerName(),
@@ -67,7 +64,7 @@ public class AuthController {
 
         log.info("Creating user request received : {}", request.getUserId());
 
-        UserDto userDto = userService.createUser(
+        UserDto userDto = userDataManager.createUser(
                 request.getUserId(),
                 request.getPassword(),
                 request.getUserName(),
@@ -87,11 +84,7 @@ public class AuthController {
     public ResponseEntity<String> signIn(
             @RequestBody @Valid SignAuth.SignIn signIn) {
 
-        UserDetails userDetails = memberAuthService
-                .authenticate(signIn.getId(), signIn.getPassword());
-
-        String token = jwtHandler
-                .generateToken(userDetails.getUsername(), userDetails.getAuthorities());
+        String token = authService.jwtSignIn(signIn.getId(), signIn.getPassword());
 
         return ResponseEntity.ok(token);
     }
