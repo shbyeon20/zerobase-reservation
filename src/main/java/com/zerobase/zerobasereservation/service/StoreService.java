@@ -23,60 +23,62 @@ import java.util.Objects;
 @Transactional
 @Slf4j
 public class StoreService {
+
     private final StoreRepository storeRepository;
     private final PartnerRepository partnerRepository;
     private final ReviewRepository reviewRepository;
 
-    @PreAuthorize("#partnerId == authentication.principal.memberId")
+    @PreAuthorize("#partnerId == authentication.principal.memberId&&hasRole('PARTNER')")
     public StoreDto createStore(String partnerId, String storeId,
-                                String address, String storeComment) {
+        String address, String storeComment) {
         log.info("store creation service start");
-        log.info("Find by partnerId for partnerEntity :" +partnerId  );
 
-        PartnerEntity partnerEntity =
-                partnerRepository.findByPartnerId(partnerId)
-                        .orElseThrow(() -> new CustomException(ErrorCode.PARTNERID_NONEXISTENT));
+        PartnerEntity partnerEntity = partnerRepository.findByPartnerId(
+                partnerId).orElseThrow(() -> new CustomException(ErrorCode.PARTNERID_NONEXISTENT));
 
+        StoreEntity storeEntity = storeRepository.save(
+            StoreEntity.builder()
+                .partnerEntity(partnerEntity)
+                .storeId(storeId)
+                .address(address)
+                .storeComment(storeComment)
+                .registeredAt(LocalDateTime.now())
+                .build());
 
-
-
-        return StoreDto.fromEntity(storeRepository.save(
-                        StoreEntity.builder()
-                                .partnerEntity(partnerEntity)
-                                .storeId(storeId)
-                                .address(address)
-                                .storeComment(storeComment)
-                                .registeredAt(LocalDateTime.now())
-                                .build()
-                )
-        );
+        return StoreDto.fromEntity(storeEntity);
 
     }
+    /*
+    파트너가 자신의 파트너명으로 등록된 매장을 조회하는 기능
+     */
 
     @PreAuthorize("#partnerId == authentication.principal.memberId")
     public List<StoreDto> findByPartnerId(String partnerId) {
-        log.info("find Store using partnerID :"+partnerId);
-        PartnerEntity partnerEntity = partnerRepository.findByPartnerId(partnerId)
-                        .orElseThrow(() -> new CustomException(ErrorCode.PARTNERID_NONEXISTENT));
+        log.info("find Store using partnerID :" + partnerId);
+        PartnerEntity partnerEntity = partnerRepository.findByPartnerId(
+                partnerId).orElseThrow(() -> new CustomException(ErrorCode.PARTNERID_NONEXISTENT));
         List<StoreEntity> storeEntities =
-                storeRepository.findAllByPartnerEntity(partnerEntity);
+            storeRepository.findAllByPartnerEntity(partnerEntity);
 
         return storeEntities.stream().map(StoreDto::fromEntity).toList();
     }
 
 
     /*
-    storeId로 등록된 매장레코드를 조회하여 매장에 관한 정보를 Web으로 반환함
+     매장을 매장명으로 조회하여 반환함
+
      */
 
     @PreAuthorize("#partnerId == authentication.principal.memberId")
     public StoreDto findByStoreId(String partnerId, String storeId) {
-        log.info("find Store using storeID :"+storeId);
+        log.info("find Store using storeID :" + storeId);
 
         StoreEntity storeEntity = storeRepository.findByStoreId(storeId)
-                .orElseThrow(() -> new CustomException(ErrorCode.STOREID_NONEXISTENT));
+            .orElseThrow(
+                () -> new CustomException(ErrorCode.STOREID_NONEXISTENT));
 
-        if(!Objects.equals(storeEntity.getPartnerEntity().getPartnerId(), partnerId)) {
+        if (!Objects.equals(storeEntity.getPartnerEntity().getPartnerId(),
+            partnerId)) {
             throw new CustomException(ErrorCode.MEMBERID_STOREOWNER_UNMATCHED);
         }
 
@@ -91,12 +93,12 @@ public class StoreService {
      */
 
     public void updateRating(StoreEntity storeEntity) {
-        log.info("update rating using storeID :"+storeEntity.getStoreId());
+        log.info("update rating using storeID :" + storeEntity.getStoreId());
 
         Double rating = reviewRepository.reupdateAverageRating(storeEntity);
         storeEntity.setRating(rating);
         storeRepository.save(storeEntity);
-        log.info("update rating using storeID :"+storeEntity.getStoreId());
+        log.info("update rating using storeID :" + storeEntity.getStoreId());
     }
 
 
