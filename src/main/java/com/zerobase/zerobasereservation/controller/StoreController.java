@@ -2,7 +2,6 @@ package com.zerobase.zerobasereservation.controller;
 
 import com.zerobase.zerobasereservation.dto.CreateStore;
 import com.zerobase.zerobasereservation.dto.StoreDto;
-import com.zerobase.zerobasereservation.security.JwtHandler;
 import com.zerobase.zerobasereservation.service.StoreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,6 @@ import java.util.List;
 @RequestMapping("/store")
 public class StoreController {
     private final StoreService storeService;
-    private final JwtHandler jwtHandler;
 
 
     /*

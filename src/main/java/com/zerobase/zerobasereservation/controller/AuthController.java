@@ -2,7 +2,7 @@ package com.zerobase.zerobasereservation.controller;
 
 
 import com.zerobase.zerobasereservation.dto.*;
-import com.zerobase.zerobasereservation.service.AuthService;
+import com.zerobase.zerobasereservation.security.AuthServiceInterface;
 import com.zerobase.zerobasereservation.service.PartnerDataManager;
 import com.zerobase.zerobasereservation.service.UserDataManager;
 import jakarta.validation.Valid;
@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class AuthController {
 
-    private final AuthService authService;
     private final UserDataManager userDataManager;
     private final PartnerDataManager partnerDataManager;
+    private final AuthServiceInterface authServiceInterface;
 
 
     /*
@@ -84,7 +84,7 @@ public class AuthController {
     public ResponseEntity<String> signIn(
             @RequestBody @Valid SignAuth.SignIn signIn) {
 
-        String token = authService.jwtSignIn(signIn.getId(), signIn.getPassword());
+        String token =  authServiceInterface.getKey(signIn.getId(), signIn.getPassword());
 
         return ResponseEntity.ok(token);
     }

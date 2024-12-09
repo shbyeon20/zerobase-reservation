@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,9 +29,7 @@ Jwt Auth에 관련한
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-        private final JwtHandler jwtHandler;
-        private final UserDetailsImpl userDetailsImpl;
-
+        private final AuthServiceInterface authServiceInterface;
         private static final String REQUEST_HEADER_NAME = "Authorization";
         private static final String REQUEST_HEADER_CONTENT_PREFIX = "Bearer ";
 
@@ -56,8 +55,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         // token이 유효한지 검증한 후, token으로부터 auehtntication을 생성한다.
-        if((!ObjectUtils.isEmpty(token)&&jwtHandler.validateToken(token))){
-            Authentication authentication = this.getJwtAuthentication(token);
+        if((!ObjectUtils.isEmpty(token)&&authServiceInterface.validateKey(token))){
+            Authentication authentication = authServiceInterface.getAuthentication(token);
+
             SecurityContextHolder.getContext().setAuthentication(authentication);
             log.info("JwtAuthFilter: SecurityContextHolder set with Authentication");
         }
@@ -69,10 +69,5 @@ public class JwtAuthFilter extends OncePerRequestFilter {
        jwt토큰으로부터 sub를 모으고 spring context 에 담을 Authentication 을 생성함
     */
 
-    public Authentication getJwtAuthentication(String jwtToken) {
-        log.info("creat authentication through token : " + jwtToken);
-        UserDetails userDetails = userDetailsImpl.loadUserByUsername(jwtHandler.getMemberIdFromToken(jwtToken));
-        return new UsernamePasswordAuthenticationToken(userDetails,"",
-                userDetails.getAuthorities());
-    }
+
 }

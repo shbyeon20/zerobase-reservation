@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/review")
 public class ReviewController {
     private final ReviewService reviewService;
-    private final JwtHandler jwtHandler;
 
 
 

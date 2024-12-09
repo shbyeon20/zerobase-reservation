@@ -1,7 +1,6 @@
 package com.zerobase.zerobasereservation.controller;
 
 import com.zerobase.zerobasereservation.dto.*;
-import com.zerobase.zerobasereservation.security.JwtHandler;
 import com.zerobase.zerobasereservation.service.ReservationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,6 @@ import java.util.List;
 @RequestMapping("/reservation")
 public class ReservationController {
     private final ReservationService reservationService;
-    private final JwtHandler jwtHandler;
 
     //todo : validation에 관련 Exception handling 처리할것
 
