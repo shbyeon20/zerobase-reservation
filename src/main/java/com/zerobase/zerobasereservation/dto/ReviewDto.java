@@ -15,13 +15,13 @@ public class ReviewDto {
     String reservationId;
     ReviewStatus status;
     String storeId;
-    Integer rating;
+    Double rating;
     String reviewContents;
 
     public static ReviewDto FromEntity(ReviewEntity reviewEntity) {
         return
         ReviewDto.builder()
-                .reviewId(reviewEntity.getReviewID())
+                .reviewId(reviewEntity.getReviewId())
                 .status(reviewEntity.getReviewStatus())
                 .userId(reviewEntity.getUserEntity().getUserId())
                 .reservationId(reviewEntity.getReservationEntity().getReservationId())

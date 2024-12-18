@@ -38,7 +38,7 @@ public class CreateReview {
         String userId;
         String reservationId;
         String storeId;
-        Integer rating;
+        Double rating;
         String reviewContents;
 
 
