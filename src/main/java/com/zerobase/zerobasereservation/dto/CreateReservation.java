@@ -19,6 +19,7 @@ public class CreateReservation {
     public static class Request {
 
 
+        String userId;
         @Size(min=1,max=10)
         private String storeId;
         @NotNull

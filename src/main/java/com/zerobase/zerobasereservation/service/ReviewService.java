@@ -38,8 +38,7 @@ public class ReviewService {
     그 후 review의 store의 rating도 같이 업데이트 하기
      */
 
-    @PreAuthorize("#userId == authentication.principal" +
-            ".memberId")
+    @PreAuthorize("#userId == authentication.principal.memberId")
     public ReviewDto createReview(String userId, Integer rating, String reservationId, String reviewContents) {
         log.info("Creating review for user {} and reservation {}", userId, reservationId);
 

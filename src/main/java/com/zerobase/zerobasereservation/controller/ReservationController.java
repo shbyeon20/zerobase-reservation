@@ -15,32 +15,23 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/reservation")
+@RequestMapping("/api/reservation")
 public class ReservationController {
     private final ReservationService reservationService;
-
-    //todo : validation에 관련 Exception handling 처리할것
-
 
     /*
      최초로 user가 reservation을 생성함
      단, reservation ID는 UUID로 자동생성되어 유저에게 전달되고 예약변경시 확인됨
      */
 
-    @PostMapping("/user/create")
+    @PostMapping
     public ResponseEntity<CreateReservation.Response> createReservation(
             @RequestBody @Valid CreateReservation.Request request) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userId = authentication.getName();
-
-        log.info("Post controller start  for  store creation : "+ userId);
-
         ReservationDto reservationDto = reservationService.createReservation(
-                userId,
+                request.getUserId(),
                 request.getStoreId(),
-                request.getReservationTime()
-        );
+                request.getReservationTime());
 
         return ResponseEntity.ok(CreateReservation.Response.fromDto(reservationDto));
     }
@@ -50,20 +41,17 @@ public class ReservationController {
         생성된 Reservation을 매장점주가 storeId를 통해서 조회를함
 
      */
-    @PostMapping("/partner/list")
-    public ResponseEntity<List<GetReservationsByPartner.Response>> getReservationsByUserId(
-            @RequestBody @Valid GetReservationsByPartner.Request request){
+    @GetMapping()
+    public ResponseEntity<List<GetReservationsByPartner.Response>> getReservationsByPartner(
+        @RequestParam String partnerId, @RequestParam String storeId){
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String partnerId = authentication.getName();
 
 
         log.info("Get controller start for fetching reservation " +
-                " by store "+request.getStoreId());
+                " by store "+storeId);
 
         List<ReservationDto> reservationDtos =
-                reservationService.getReservationsByPartner(
-                        partnerId, request.getStoreId());
+                reservationService.getReservationsByPartner(partnerId, storeId);
 
         return ResponseEntity.ok(
                 reservationDtos.stream().map(GetReservationsByPartner.Response::fromDto).toList());
@@ -75,24 +63,14 @@ public class ReservationController {
 
      */
 
-    @PostMapping("/user/list")
+    @GetMapping()
     public ResponseEntity<List<GetReservationsByUser.Response>> getReservationsByUserId(
-            @RequestBody @Valid GetReservationsByUser.Request request
+        @RequestParam String userId, @RequestParam String storeId
             ){
-
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String userId = authentication.getName();
-
-
-        log.info("Get controller start for fetching reservation " +
-                "by user : "+userId+" by store "+request.getStoreId());
-
+        log.info("Get controller start for fetching reservation ");
 
         List<ReservationDto> reservationDtos =
-                reservationService.searchReservationsByUser(userId,
-                        request.getStoreId());
-        System.out.println(reservationDtos.toString());
+                reservationService.searchReservationsByUser(userId, storeId);
 
         return ResponseEntity.ok(
                 reservationDtos.stream().map(GetReservationsByUser.Response::fromDto).toList());
@@ -107,76 +85,23 @@ public class ReservationController {
      */
 
 
-    @PatchMapping("/partner/accept")
+    @PatchMapping("/{reservationId}")
     public ResponseEntity<UpdateStatusReservation.Response> acceptReservation(
+        @PathVariable String reservationId,
             @RequestBody @Valid  UpdateStatusReservation.Request request){
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String memberId = authentication.getName();
+
 
         log.info("Patch controller start for confirming reservation status " +
-                "using resrvationId : "+request.getReservationId());
+                "using resrvationId : "+reservationId);
 
 
         ReservationDto reservationDto =
-                reservationService.acceptReservation(
-                        memberId,
-                        request.getReservationId()
-                        );
+                reservationService.acceptReservation(request.getMemberId(), reservationId,request.getStatus());
 
         return ResponseEntity.ok(UpdateStatusReservation.Response.fromDto(reservationDto));
 
     }
-
-
-
-    /*
-              매장주인이 reserved 상태인 예약을 예약을 거절할때 rejected상태로 변경함
-     */
-
-    @PatchMapping("partner/reject")
-    public ResponseEntity<UpdateStatusReservation.Response> rejectReservation(
-            @RequestBody @Valid  UpdateStatusReservation.Request request){
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String memberId = authentication.getName();
-
-        log.info("Patch controller start for rejecting reservation status " +
-                "using resrvationId : "+ request.getReservationId());
-
-
-        ReservationDto reservationDto =
-                reservationService.rejectReservation(
-                        memberId,
-                        request.getReservationId()
-                );
-
-        return ResponseEntity.ok(UpdateStatusReservation.Response.fromDto(reservationDto));
-
-    }
-
-    /*
-       손님이 키오스크에 방문하여 Accepted 상태인 예약을 승인하여 confiremd상태로 변경함
-       단, 10분 이전에 확정을 해야 인정됨
-
-     */
-
-    @PatchMapping("/kiosk/confirm")
-    public ResponseEntity<UpdateStatusReservation.Response> confirmReservation(
-            @RequestBody @Valid  UpdateStatusReservation.Request request){
-        log.info("Patch controller start for confriming reservation status " +
-                "using resrvationId : "+request.getReservationId());
-
-
-        ReservationDto reservationDto =
-                reservationService.confirmReservation(
-                        request.getReservationId()
-                );
-
-        return ResponseEntity.ok(UpdateStatusReservation.Response.fromDto(reservationDto));
-
-    }
-
 
 
 

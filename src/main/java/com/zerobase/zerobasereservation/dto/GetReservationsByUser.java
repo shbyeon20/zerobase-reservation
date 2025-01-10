@@ -20,6 +20,7 @@ public class GetReservationsByUser {
 
         @Size(min=1,max=10)
         private String storeId;
+        private String userId;
 
     }
 

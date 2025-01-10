@@ -15,7 +15,8 @@ public class UpdateStatusReservation {
     @NoArgsConstructor
     public static class Request {
         @Size(min=1,max=10)
-        private String reservationId;
+        private String memberId;
+        private ReservationStatus status;
 
 
 
