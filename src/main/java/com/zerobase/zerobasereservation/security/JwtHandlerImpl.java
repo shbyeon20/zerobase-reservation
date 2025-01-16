@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,7 +21,7 @@ import java.util.Date;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class JwtHandler implements JwtHandlerInterface {
+public class JwtHandlerImpl implements JwtHandlerInterface {
     private static final String KEY_ROLES = "roles";
     private static final Long TIME_TOKEN_EXPIRE_TIME = 1000 * 60 * 60L;//1hour
 
@@ -85,6 +86,19 @@ public class JwtHandler implements JwtHandlerInterface {
     public String getMemberIdFromToken(String jwt) {
         Claims claims = this.parseClaimsFromToken(jwt);
         return claims.getSubject();
+    }
+
+    @Override
+    public Collection<GrantedAuthority> getAuthoritiesFromToken(String jwt) {
+        Claims claims = this.parseClaimsFromToken(jwt);
+
+        List<String> roles = claims.get(KEY_ROLES, List.class);
+
+        Collection<GrantedAuthority> authorities = roles.stream()
+            .map(role -> (GrantedAuthority) () -> role) // Lambda to create a GrantedAuthority
+            .toList();
+
+        return authorities;
     }
 }
 
