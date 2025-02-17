@@ -39,3 +39,6 @@
 
 ### 파트너
 - [x] 자신의 예약에 대한 리뷰 삭제하기 (권한제어)
+
+
+![reservation (1).png](https://prod-files-secure.s3.us-west-2.amazonaws.com/8c14d2ae-75e6-4b51-ba0b-b944907fa40d/5b22bcb6-43c7-4754-8ad2-d3df71474f05/144ffb20-92f9-4d11-9cd3-946733043ff1.png)
