@@ -1,12 +1,13 @@
-package com.zerobase.zerobasereservation.controller;
+package com.zerobase.zerobasereservation.reservation.controller;
 
-import com.zerobase.zerobasereservation.dto.CreateReservation;
-import com.zerobase.zerobasereservation.dto.GetReservationsByPartner;
-import com.zerobase.zerobasereservation.dto.GetReservationsByUser;
-import com.zerobase.zerobasereservation.dto.ReservationDto;
-import com.zerobase.zerobasereservation.dto.UpdateStatusReservation;
-import com.zerobase.zerobasereservation.service.ReservationService;
-import com.zerobase.zerobasereservation.service.ReservationStatusFacade;
+import com.zerobase.zerobasereservation.reservation.dto.CreateReservation;
+import com.zerobase.zerobasereservation.reservation.dto.GetReservationsByPartner;
+import com.zerobase.zerobasereservation.reservation.dto.GetReservationsByUser;
+import com.zerobase.zerobasereservation.reservation.dto.ReservationDto;
+import com.zerobase.zerobasereservation.reservation.dto.UpdateStatusReservation;
+import com.zerobase.zerobasereservation.reservation.dto.CreateReservation.Response;
+import com.zerobase.zerobasereservation.reservation.service.ReservationService;
+import com.zerobase.zerobasereservation.reservation.service.ReservationStatusFacade;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/reservation")
+@RequestMapping("/api")
 public class ReservationController {
     private final ReservationService reservationService;
     private final ReservationStatusFacade reservationStatusFacade;
@@ -34,8 +35,8 @@ public class ReservationController {
      단, reservation ID는 UUID로 자동생성되어 유저에게 전달되고 예약변경시 확인됨
      */
 
-    @PostMapping
-    public ResponseEntity<CreateReservation.Response> createReservation(
+    @PostMapping("/reservation")
+    public ResponseEntity<Response> createReservation(
             @RequestBody @Valid CreateReservation.Request request) {
 
         ReservationDto reservationDto = reservationService.createReservation(
@@ -51,7 +52,7 @@ public class ReservationController {
         생성된 Reservation을 매장점주가 storeId를 통해서 조회를함
 
      */
-    @GetMapping()
+    @GetMapping("/partner/{partnerId}/store/{storeId}/reservation")
     public ResponseEntity<List<GetReservationsByPartner.Response>> getReservationsByPartner(
         @RequestParam String partnerId, @RequestParam String storeId){
 
@@ -61,7 +62,7 @@ public class ReservationController {
                 " by store "+storeId);
 
         List<ReservationDto> reservationDtos =
-                reservationService.getReservationsByPartner(partnerId, storeId);
+                reservationService.getReservationsByStore(partnerId, storeId);
 
         return ResponseEntity.ok(
                 reservationDtos.stream().map(GetReservationsByPartner.Response::fromDto).toList());
@@ -73,14 +74,14 @@ public class ReservationController {
 
      */
 
-    @GetMapping()
+    @GetMapping("/user/{userId}/reservation")
     public ResponseEntity<List<GetReservationsByUser.Response>> getReservationsByUserId(
-        @RequestParam String userId, @RequestParam String storeId
+        @RequestParam String userId
             ){
         log.info("Get controller start for fetching reservation ");
 
         List<ReservationDto> reservationDtos =
-                reservationService.searchReservationsByUser(userId, storeId);
+                reservationService.searchReservationsByUser(userId);
 
         return ResponseEntity.ok(
                 reservationDtos.stream().map(GetReservationsByUser.Response::fromDto).toList());
@@ -95,7 +96,7 @@ public class ReservationController {
      */
 
 
-    @PatchMapping("/{reservationId}")
+    @PatchMapping("reservation/{reservationId}")
     public ResponseEntity<UpdateStatusReservation.Response> updateReservationStatus(
         @PathVariable String reservationId,
             @RequestBody @Valid  UpdateStatusReservation.Request request){
