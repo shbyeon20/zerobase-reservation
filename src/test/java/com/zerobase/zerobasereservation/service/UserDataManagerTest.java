@@ -1,9 +1,11 @@
 package com.zerobase.zerobasereservation.service;
 
-import com.zerobase.zerobasereservation.dto.UserDto;
-import com.zerobase.zerobasereservation.entity.UserEntity;
-import com.zerobase.zerobasereservation.repository.UserRepository;
-import com.zerobase.zerobasereservation.type.ROLE;
+import com.zerobase.zerobasereservation.reservation.dto.UserDto;
+import com.zerobase.zerobasereservation.reservation.entity.UserEntity;
+import com.zerobase.zerobasereservation.reservation.repository.UserRepository;
+import com.zerobase.zerobasereservation.reservation.service.UserDataManager;
+import com.zerobase.zerobasereservation.reservation.service.UserDetailsImpl;
+import com.zerobase.zerobasereservation.reservation.type.ROLE;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;

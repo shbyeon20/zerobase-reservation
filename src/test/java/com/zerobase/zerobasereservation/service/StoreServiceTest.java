@@ -1,13 +1,14 @@
 package com.zerobase.zerobasereservation.service;
 
-import com.zerobase.zerobasereservation.dto.StoreDto;
-import com.zerobase.zerobasereservation.entity.PartnerEntity;
-import com.zerobase.zerobasereservation.entity.StoreEntity;
-import com.zerobase.zerobasereservation.exception.CustomException;
-import com.zerobase.zerobasereservation.repository.PartnerRepository;
-import com.zerobase.zerobasereservation.repository.ReviewRepository;
-import com.zerobase.zerobasereservation.repository.StoreRepository;
-import com.zerobase.zerobasereservation.type.ErrorCode;
+import com.zerobase.zerobasereservation.reservation.dto.StoreDto;
+import com.zerobase.zerobasereservation.reservation.entity.PartnerEntity;
+import com.zerobase.zerobasereservation.reservation.entity.StoreEntity;
+import com.zerobase.zerobasereservation.reservation.exception.CustomException;
+import com.zerobase.zerobasereservation.reservation.repository.PartnerRepository;
+import com.zerobase.zerobasereservation.reservation.repository.ReviewRepository;
+import com.zerobase.zerobasereservation.reservation.repository.StoreRepository;
+import com.zerobase.zerobasereservation.reservation.service.StoreService;
+import com.zerobase.zerobasereservation.reservation.type.ErrorCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,10 +1,11 @@
 package com.zerobase.zerobasereservation.service;
 
-import com.zerobase.zerobasereservation.entity.MemberDetails;
-import com.zerobase.zerobasereservation.exception.CustomException;
-import com.zerobase.zerobasereservation.repository.MemberRepository;
-import com.zerobase.zerobasereservation.type.ErrorCode;
-import com.zerobase.zerobasereservation.type.ROLE;
+import com.zerobase.zerobasereservation.reservation.entity.MemberDetails;
+import com.zerobase.zerobasereservation.reservation.exception.CustomException;
+import com.zerobase.zerobasereservation.reservation.repository.MemberRepository;
+import com.zerobase.zerobasereservation.reservation.service.UserDetailsImpl;
+import com.zerobase.zerobasereservation.reservation.type.ErrorCode;
+import com.zerobase.zerobasereservation.reservation.type.ROLE;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
