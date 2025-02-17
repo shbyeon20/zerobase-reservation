@@ -1,16 +1,25 @@
 package com.zerobase.zerobasereservation.controller;
 
-import com.zerobase.zerobasereservation.dto.*;
+import com.zerobase.zerobasereservation.dto.CreateReservation;
+import com.zerobase.zerobasereservation.dto.GetReservationsByPartner;
+import com.zerobase.zerobasereservation.dto.GetReservationsByUser;
+import com.zerobase.zerobasereservation.dto.ReservationDto;
+import com.zerobase.zerobasereservation.dto.UpdateStatusReservation;
 import com.zerobase.zerobasereservation.service.ReservationService;
+import com.zerobase.zerobasereservation.service.ReservationStatusFacade;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
@@ -18,6 +27,7 @@ import java.util.List;
 @RequestMapping("/api/reservation")
 public class ReservationController {
     private final ReservationService reservationService;
+    private final ReservationStatusFacade reservationStatusFacade;
 
     /*
      최초로 user가 reservation을 생성함
@@ -86,7 +96,7 @@ public class ReservationController {
 
 
     @PatchMapping("/{reservationId}")
-    public ResponseEntity<UpdateStatusReservation.Response> acceptReservation(
+    public ResponseEntity<UpdateStatusReservation.Response> updateReservationStatus(
         @PathVariable String reservationId,
             @RequestBody @Valid  UpdateStatusReservation.Request request){
 
@@ -97,11 +107,13 @@ public class ReservationController {
 
 
         ReservationDto reservationDto =
-                reservationService.acceptReservation(request.getMemberId(), reservationId,request.getStatus());
+                reservationStatusFacade.readStatusAndAssignService(request.getMemberId(), reservationId,request.getStatus());
 
         return ResponseEntity.ok(UpdateStatusReservation.Response.fromDto(reservationDto));
 
     }
+    
+    
 
 
 

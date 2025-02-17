@@ -192,7 +192,7 @@ public class ReservationService {
     */
 
 
-    public ReservationDto confirmReservation(String reservationId) {
+    public ReservationDto confirmReservation(String reservationId, String memberId) {
 
         log.info("Confirming reservation status for reservation {}",
                 reservationId);
@@ -205,9 +205,14 @@ public class ReservationService {
             throw new CustomException(ErrorCode.RESERVATION_STATUS_ERROR);
         }
 
+        if(!reservationEntity.getUserEntity().getUserId().equals(memberId)) {
+            throw new CustomException(ErrorCode.USERID_RESERVATION_UNMATCHED);
+        }
+
         if(LocalDateTime.now().plusMinutes(10).isAfter(reservationEntity.getReservationTime())){
             throw new CustomException(ErrorCode.CONFIRMATION_TOO_LATE);
         }
+
 
         reservationEntity.setReservationStatus(ReservationStatus.CONFIRMED);
 
@@ -219,4 +224,6 @@ public class ReservationService {
 
 
     }
+
+
 }

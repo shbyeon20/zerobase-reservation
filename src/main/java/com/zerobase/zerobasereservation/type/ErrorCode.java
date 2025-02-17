@@ -18,7 +18,8 @@ public enum ErrorCode {
     CONFIRMATION_TOO_LATE("예약확정은 예약시간이 되기 10분 이전까지만 가능합니다"),
     USERID_REVIEWUSER_UNMATCHED("Review의 User와 UserID가 일치하지 않습니다."),
     MEMBERID_REVIEWUSER_UNMATCHED("Review의 Member와 MemberID가 일치하지 않습니다."),
-    MEMBERID_STOREOWNER_UNMATCHED("store의 Owner와 MemberId가 일치하지 않습니다.");
+    MEMBERID_STOREOWNER_UNMATCHED("store의 Owner와 MemberId가 일치하지 않습니다."),
+    USERID_RESERVATION_UNMATCHED("예약자의 ID가 일치하지 않습니다");
 
 
 
