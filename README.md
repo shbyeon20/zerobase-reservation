@@ -39,3 +39,6 @@
 
 ### 파트너
 - [x] 자신의 예약에 대한 리뷰 삭제하기 (권한제어)
+
+![reservation (1)](https://github.com/user-attachments/assets/64746c4b-7cf5-4b06-946f-1abed967134d)
+
