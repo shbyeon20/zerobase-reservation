@@ -1,6 +1,5 @@
-package com.zerobase.zerobasereservation.websocket.config;
+package com.zerobase.zerobasereservation.websocket;
 
-import com.zerobase.zerobasereservation.websocket.NotificationWebSocketHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;

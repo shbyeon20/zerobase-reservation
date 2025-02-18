@@ -1,0 +1,7 @@
+### GET request to example server
+POST http://localhost:8080//api/websocket/test/123
+    ?generated-in=IntelliJ IDEA
+
+###
+
+
