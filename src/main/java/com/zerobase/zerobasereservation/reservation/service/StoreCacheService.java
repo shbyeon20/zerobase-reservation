@@ -1,10 +1,12 @@
 package com.zerobase.zerobasereservation.reservation.service;
 import com.zerobase.zerobasereservation.reservation.dto.StoreDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class StoreCacheService {
@@ -21,10 +23,12 @@ public class StoreCacheService {
         // 1️⃣ Redis에서 데이터 가져오기 (LFU 캐시 적용됨)
         String storeData = redisTemplate.opsForValue().get(redisKey);
         if (storeData != null) {
+            log.info("Found store with id from redis {}", storeId);
             return StoreDto.fromJson(storeData); // JSON 변환
         }
 
         // 2️⃣ 캐시에 없으면 DB에서 조회 후 Redis에 저장
+        log.info(" store new data to redis {}", storeId);
         StoreDto storeDto = storeService.findByStoreId(storeId);
         redisTemplate.opsForValue().set(redisKey, StoreDto.toJson(storeDto), EXPIRATION_TIME, TimeUnit.SECONDS);
 
