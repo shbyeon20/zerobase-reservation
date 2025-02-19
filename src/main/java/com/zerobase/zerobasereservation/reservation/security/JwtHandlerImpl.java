@@ -1,9 +1,11 @@
 package com.zerobase.zerobasereservation.reservation.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +27,7 @@ public class JwtHandlerImpl implements JwtHandlerInterface {
     private static final String KEY_ROLES = "roles";
     private static final Long TIME_TOKEN_EXPIRE_TIME = 1000 * 60 * 60L;//1hour
 
+
     @Value("${spring.jwt.secret}")
     private String secretKey;
 
@@ -40,7 +43,15 @@ public class JwtHandlerImpl implements JwtHandlerInterface {
                 SignatureAlgorithm.HS512.getJcaName());
 
         Claims customClaims = Jwts.claims();
-        customClaims.put(KEY_ROLES,role);
+
+        // 단일 권한만 저장 (첫 번째 권한 선택)
+        String singleRole = role.stream()
+            .map(GrantedAuthority::getAuthority) // 권한 이름만 추출
+            .findFirst() // 첫 번째 권한 가져오기
+            .orElse("ROLE_USER"); // 기본값 설정 (권한이 없는 경우)
+
+
+        customClaims.put(KEY_ROLES,singleRole);
 
         return Jwts.builder()
                 .setClaims(customClaims)
@@ -92,13 +103,17 @@ public class JwtHandlerImpl implements JwtHandlerInterface {
     public Collection<GrantedAuthority> getAuthoritiesFromToken(String jwt) {
         Claims claims = this.parseClaimsFromToken(jwt);
 
-        List<String> roles = claims.get(KEY_ROLES, List.class);
+        // JWT에서 단일 역할(Role) 가져오기
+        String role = claims.get(KEY_ROLES, String.class);
 
-        Collection<GrantedAuthority> authorities = roles.stream()
-            .map(role -> (GrantedAuthority) () -> role) // Lambda to create a GrantedAuthority
-            .toList();
+        // 역할이 없을 경우 기본값 설정 (선택 사항)
+        if (role == null || role.isBlank()) {
+            return Collections.emptyList(); // 빈 리스트 반환
+        }
 
-        return authorities;
+        // 단일 권한을 Collection으로 변환
+        return List.of((GrantedAuthority) () -> role);
     }
+
 }
 
