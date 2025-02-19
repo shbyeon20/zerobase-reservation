@@ -1,32 +1,21 @@
 ### Send POST request with json body
-POST http://localhost:8080/reservations
+POST http://localhost:8080/api/reservation
 Content-Type: application/json
 
 {
-  "userId": "kkc123",
+  "userId": "user123",
   "storeId" : "투썸플레이스동대문",
-  "reservationTime": "2024-08-30T14:00"
+  "reservationTime": "2025-08-30T14:00"
 }
 
-### Send POST request with json body
-POST http://localhost:8080/reservations
+### 예약상태변경
+PATCH http://localhost:8080/api/reservation/uvfySax6
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6IlJPTEVfUEFSVE5FUiIsInN1YiI6InBhcnRuZXIxMjMiLCJpYXQiOjE3Mzk4Nzg3MTksImV4cCI6MTczOTg4MjMxOX0.pmHNzVjY6VA3N18YX4wzlDt3O8AH0KY5OJaTOWPFAniW8vBirVYwPrYICqSzDykwzalnFYsWb_BuMS90YYxDqQ
 
 {
-  "userId": "alexander1",
-  "storeId" : "스타벅스동대문",
-  "reservationTime": "2024-09-02T14:00"
-}
-
-
-
-### Send POST request with json body
-POST http://localhost:8080/reservations/listbypartner
-Content-Type: application/json
-
-{
-  "partnerId": "bsh6226",
-  "storeId": "스타벅스동대문"
+  "memberId": "partner123",
+  "status": "REJECTED"
 }
 
 

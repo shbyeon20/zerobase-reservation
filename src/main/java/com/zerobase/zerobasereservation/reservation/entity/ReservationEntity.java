@@ -26,6 +26,7 @@ public class ReservationEntity {
     @JoinColumn(name = "storeId", referencedColumnName = "storeId",
             nullable = false)
     StoreEntity storeEntity;
+    @Enumerated(EnumType.STRING)
     ReservationStatus reservationStatus;
     LocalDateTime reservationTime;
     LocalDateTime createdAt;
