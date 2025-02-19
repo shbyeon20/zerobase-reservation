@@ -1,7 +1,7 @@
 ### Send POST request with json body
-POST http://localhost:8080/store/partner/create
+POST http://localhost:8080/api/store/partner/create
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9QQVJUTkVSIn1dfQ.8JJw82ubv8uaavYGpLHRhb1Rhao_tnbzmWksoKLyZZhmYyS3q4HIC3gekXrtAmMMwg6v7i0y5StUf1FTYUgo2w
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6IlJPTEVfUEFSVE5FUiIsInN1YiI6InBhcnRuZXIxMjMiLCJpYXQiOjE3Mzk4Nzg3MTksImV4cCI6MTczOTg4MjMxOX0.pmHNzVjY6VA3N18YX4wzlDt3O8AH0KY5OJaTOWPFAniW8vBirVYwPrYICqSzDykwzalnFYsWb_BuMS90YYxDqQ
 
 {
   "storeId" : "투썸플레이스동대문",
@@ -10,18 +10,5 @@ Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6W3siYXV0aG9yaXR5IjoiUk9MR
 
 }
 
-### Send POST request with json body
-POST http://localhost:8080/store
-Content-Type: application/json
-
-{
-  "partnerId": "jjh6226",
-  "storeId" : "스타벅스동대문",
-  "address": "서울시동대문구용두동",
-  "storeComment" : "청결한 매장"
-}
 
 
-### GET request with a
-GET http://localhost:8080/stores/partnerId/partner1
-Accept: application/json

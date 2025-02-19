@@ -1,5 +1,0 @@
-### Send POST request with json body
-GET http://localhost:8080//partner/bsh6226/search
-Content-Type: application/json
-Authorization: eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6W3siYXV0aG9yaXR5IjoiUk9MRV9QQVJUTkVSIn1dfQ.8JJw82ubv8uaavYGpLHRhb1Rhao_tnbzmWksoKLyZZhmYyS3q4HIC3gekXrtAmMMwg6v7i0y5StUf1FTYUgo2w
-

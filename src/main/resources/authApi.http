@@ -1,59 +1,45 @@
 ### Send POST request with json body
-POST http://localhost:8080/auth/partner
+POST http://localhost:8080/api/auth/partner
 Content-Type: application/json
 
 
 {
-  "partnerId": "bsh6226",
-  "password": "bsh6226",
-  "partnerName" : "변상화",
+  "partnerId": "partner123",
+  "password": "partner123",
+  "partnerName" : "partner123",
   "businessId": 1234567890,
-  "phoneNumber" : "01041589332"
+  "phoneNumber" : "12345678900"
 }
 
 
 ### Send POST request with json body
-POST http://localhost:8080/auth/sign-in
+GET http://localhost:8080/api/auth/sign-in
 Content-Type: application/json
 
 {
-  "id": "bsh6226",
-  "password": "bsh6226"
+  "id": "partner123",
+  "password": "partner123"
 }
 
-### Send POST request with json body
-POST http://localhost:8080/auth/partner
-Content-Type: application/json
-
-{
-  "partnerId": "jjh6226",
-  "password": "bsh6226",
-  "partnerName" : "조정해",
-  "businessId": 1234567890,
-  "phoneNumber" : "01041589332"
-}
 
 
 ### Send POST request with json body
-POST http://localhost:8080/auth/user
+POST http://localhost:8080/api/auth/user
 Content-Type: application/json
 
 {
-  "userId": "sh6226",
-  "password": "bsh6226",
-  "userName" : "변상화",
-  "phoneNumber" : "01041589332"
+  "userId": "user123",
+  "password": "user123",
+  "userName" : "user123",
+  "phoneNumber" : "12345678900"
 }
+
 
 ### Send POST request with json body
-POST http://localhost:8080/auth/user
+GET http://localhost:8080/api/auth/sign-in
 Content-Type: application/json
 
 {
-  "userId": "sh6226",
-  "password": "bsh6226",
-  "userName" : "조정해",
-  "phoneNumber" : "01041589332"
+  "id": "user123",
+  "password": "user123"
 }
-
-

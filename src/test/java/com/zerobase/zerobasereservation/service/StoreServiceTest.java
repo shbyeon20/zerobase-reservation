@@ -152,7 +152,7 @@ class StoreServiceTest {
                 .willReturn(Optional.of(storeEntity));
 
         // When
-        StoreDto result = storeService.findByStoreId(partnerId, storeId);
+        StoreDto result = storeService.findByStoreId( storeId);
 
         // Then
         then(storeRepository).should().findByStoreId(storeId);
@@ -172,7 +172,7 @@ class StoreServiceTest {
 
         // When
         CustomException exception = assertThrows(CustomException.class, () -> {
-            storeService.findByStoreId(partnerId, storeId);
+            storeService.findByStoreId( storeId);
         });
 
         // Then
@@ -190,7 +190,7 @@ class StoreServiceTest {
 
         // When
         CustomException exception = assertThrows(CustomException.class, () -> {
-            storeService.findByStoreId(partnerId, storeId);
+            storeService.findByStoreId( storeId);
         });
 
         // Then
