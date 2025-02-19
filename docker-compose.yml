@@ -28,5 +28,16 @@ services:
       - mysql_data:/var/lib/mysql
 
 
+  redis:
+    image: redis:latest
+    container_name: reservation-redis
+    restart: always
+    ports:
+      - "6379:6379"  # Redis 기본 포트
+    command: redis-server --maxmemory-policy allkeys-lfu
+    volumes:
+      - redis_data:/data
+
 volumes:
-    mysql_data:
+  mysql_data:
+  redis_data:
