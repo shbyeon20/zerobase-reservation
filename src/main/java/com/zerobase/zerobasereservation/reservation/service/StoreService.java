@@ -69,18 +69,12 @@ public class StoreService {
 
      */
 
-    @PreAuthorize("#partnerId == authentication.principal.memberId")
-    public StoreDto findByStoreId(String partnerId, String storeId) {
+    public StoreDto findByStoreId( String storeId) {
         log.info("find Store using storeID :" + storeId);
 
         StoreEntity storeEntity = storeRepository.findByStoreId(storeId)
             .orElseThrow(
                 () -> new CustomException(ErrorCode.STOREID_NONEXISTENT));
-
-        if (!Objects.equals(storeEntity.getPartnerEntity().getPartnerId(),
-            partnerId)) {
-            throw new CustomException(ErrorCode.MEMBERID_STOREOWNER_UNMATCHED);
-        }
 
         return StoreDto.fromEntity(storeEntity);
     }
