@@ -96,7 +96,7 @@ public class ReservationController {
      */
 
 
-    @PatchMapping("reservation/{reservationId}")
+    @PatchMapping("/reservation/{reservationId}")
     public ResponseEntity<UpdateStatusReservation.Response> updateReservationStatus(
         @PathVariable String reservationId,
             @RequestBody @Valid  UpdateStatusReservation.Request request){
