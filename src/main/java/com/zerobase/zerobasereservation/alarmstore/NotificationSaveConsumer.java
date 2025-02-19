@@ -1,5 +1,6 @@
 package com.zerobase.zerobasereservation.alarmstore;
 
+import static com.zerobase.zerobasereservation.rabbitmq.RabbitmqConfiguration.QUEUE_ALARM_SAVE;
 import static com.zerobase.zerobasereservation.rabbitmq.RabbitmqConfiguration.QUEUE_ALARM_SOCKET;
 
 import com.zerobase.zerobasereservation.reservation.dto.NotificationMessage;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-@RabbitListener(queues = QUEUE_ALARM_SOCKET)
+@RabbitListener(queues = QUEUE_ALARM_SAVE)
 @RequiredArgsConstructor
 public class NotificationSaveConsumer {
 
