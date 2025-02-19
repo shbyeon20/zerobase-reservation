@@ -1,5 +1,6 @@
 package com.zerobase.zerobasereservation.websocket;
 
+import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.web.socket.TextMessage;
@@ -26,7 +27,8 @@ public class NotificationWebSocketHandler extends TextWebSocketHandler {
             userSessions.values().remove(session);
         }
 
-        public void sendNotification(String userId, String message) throws Exception {
+        public void sendNotification(String userId, String message)
+            throws IOException {
             WebSocketSession session = userSessions.get(userId);
             if (session != null && session.isOpen()) {
                 session.sendMessage(new TextMessage(message));

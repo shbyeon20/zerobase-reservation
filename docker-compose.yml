@@ -1,0 +1,32 @@
+version: '3.8'
+
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: reservation-rabbitmq
+    ports:
+      - "5672:5672"   # AMQP 프로토콜 포트
+      - "15672:15672" # RabbitMQ 관리 UI 포트
+    environment:
+      RABBITMQ_DEFAULT_USER: testuser
+      RABBITMQ_DEFAULT_PASS: testuser
+    restart: always
+
+  mysql:
+    image: mysql:8.0
+    container_name: reservation-mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: reservation
+      MYSQL_USER: testuser
+      MYSQL_PASSWORD: testuser
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+
+volumes:
+    mysql_data:
