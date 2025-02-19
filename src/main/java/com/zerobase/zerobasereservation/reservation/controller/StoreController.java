@@ -2,6 +2,7 @@ package com.zerobase.zerobasereservation.reservation.controller;
 
 import com.zerobase.zerobasereservation.reservation.dto.CreateStore;
 import com.zerobase.zerobasereservation.reservation.dto.StoreDto;
+import com.zerobase.zerobasereservation.reservation.service.StoreCacheService;
 import com.zerobase.zerobasereservation.reservation.service.StoreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,16 +19,16 @@ import java.util.List;
 @RequiredArgsConstructor
 
 
-@RequestMapping("/store")
 public class StoreController {
     private final StoreService storeService;
+    private final StoreCacheService storeCacheService;
 
 
     /*
      partner로부터 store 정보를 입력받아서 store record를 생성할것
      */
 
-    @PostMapping("/partner/create")
+    @PostMapping("/api/store/partner/create")
     public ResponseEntity<CreateStore.Response> createStore(
             @RequestBody @Valid CreateStore.Request request) {
         log.info("Post controller start  for  store creation : " );
@@ -50,7 +51,7 @@ public class StoreController {
     /*
     파트너ID로 등록된 매장의 리스트를 파트너가 조회하는 기능
      */
-    @GetMapping("/partner/{partnerId}/search")
+    @GetMapping("/api/partner/{partnerId}/store")
     public ResponseEntity<List<StoreDto>> findByPartnerId(
             @PathVariable String partnerId)
     {
@@ -62,16 +63,13 @@ public class StoreController {
     스토어ID로 등록된 매장의 정보를 사용자가 조회하는 기능
      */
 
-    @GetMapping("/{storeId}/user/search")
+    @GetMapping("/api/store/{storeId}")
     public ResponseEntity<StoreDto> findByStoreId(
-            @PathVariable String storeId,
-            @RequestHeader("Authorization") String token)
+            @PathVariable String storeId)
     {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String partnerId = authentication.getName();
 
         log.info("Get Controller start for store Info using storeId :" +storeId);
-        return ResponseEntity.ok(storeService.findByStoreId(partnerId,storeId));
+        return ResponseEntity.ok(storeCacheService.findByStoreId(storeId));
     }
 
 
