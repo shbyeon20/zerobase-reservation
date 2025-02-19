@@ -34,7 +34,6 @@ public class AlarmLogEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     long id;
 
-    @Column(unique = true)
     String memberId;
 
     String message;
