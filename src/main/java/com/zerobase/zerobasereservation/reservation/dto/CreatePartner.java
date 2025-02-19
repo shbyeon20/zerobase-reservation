@@ -24,7 +24,6 @@ public class CreatePartner {
         @Size(min=3,max=10)
         @NotNull
         private String partnerName;
-        @Size(min=10,max=10)
         @NotNull
         private long businessId;
         @NotNull

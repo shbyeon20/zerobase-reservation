@@ -2,6 +2,7 @@ package com.zerobase.zerobasereservation.reservation.dto;
 
 
 import com.zerobase.zerobasereservation.reservation.type.ReservationStatus;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -16,6 +17,7 @@ public class UpdateStatusReservation {
     public static class Request {
         @Size(min=1,max=10)
         private String memberId;
+        @NotNull
         private ReservationStatus status;
 
 
