@@ -1,14 +1,20 @@
 ### Send POST request with json body
 POST http://localhost:8080/api/store/partner/create
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6IlJPTEVfUEFSVE5FUiIsInN1YiI6InBhcnRuZXIxMjMiLCJpYXQiOjE3Mzk4Nzg3MTksImV4cCI6MTczOTg4MjMxOX0.pmHNzVjY6VA3N18YX4wzlDt3O8AH0KY5OJaTOWPFAniW8vBirVYwPrYICqSzDykwzalnFYsWb_BuMS90YYxDqQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6IlJPTEVfUEFSVE5FUiIsInN1YiI6InBhcnRuZXIxMjMiLCJpYXQiOjE3Mzk5NDM2NzMsImV4cCI6MTczOTk0NzI3M30.fZegyF9BLi5hka5-wCR5_sC7xM7FaswIla_4CUugaY_iUKfEgOd4NZ4T9c8Pd5P7A1p-UD3omjS07UwJ5EGVUQ
 
 {
-  "storeId" : "투썸플레이스동대문",
+  "storeId" : "twosome",
   "address": "서울시동대문구용두동",
   "storeComment" : "청결한 매장"
 
 }
+
+
+
+### Send POST request with json body
+GET http://localhost:8080/api/store/twosome
+Content-Type: application/json
 
 
 

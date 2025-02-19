@@ -4,14 +4,14 @@ Content-Type: application/json
 
 {
   "userId": "user123",
-  "storeId" : "투썸플레이스동대문",
+  "storeId" : "twosome",
   "reservationTime": "2025-08-30T14:00"
 }
 
 ### 예약상태변경
-PATCH http://localhost:8080/api/reservation/uvfySax6
+PATCH http://localhost:8080/api/reservation/e00KHwyM
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6IlJPTEVfUEFSVE5FUiIsInN1YiI6InBhcnRuZXIxMjMiLCJpYXQiOjE3Mzk4Nzg3MTksImV4cCI6MTczOTg4MjMxOX0.pmHNzVjY6VA3N18YX4wzlDt3O8AH0KY5OJaTOWPFAniW8vBirVYwPrYICqSzDykwzalnFYsWb_BuMS90YYxDqQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlcyI6IlJPTEVfUEFSVE5FUiIsInN1YiI6InBhcnRuZXIxMjMiLCJpYXQiOjE3Mzk5NDMyOTAsImV4cCI6MTczOTk0Njg5MH0.8NXnsDtWreBsePTln42Y1DO8soBmlSK7j8nhaKge0_kdK0ugQjcwA5Zsz2ojZzgMBOJX5-mtIeshYJPmf_FN-w
 
 {
   "memberId": "partner123",
