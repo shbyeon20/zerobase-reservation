@@ -3,7 +3,6 @@ package com.zerobase.zerobasereservation.websocket;
 import static com.zerobase.zerobasereservation.rabbitmq.RabbitmqConfiguration.QUEUE_ALARM_SOCKET;
 
 import com.zerobase.zerobasereservation.reservation.dto.NotificationMessage;
-import javax.management.Notification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
@@ -14,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RabbitListener(queues = QUEUE_ALARM_SOCKET)
 @RequiredArgsConstructor
-public class NotificationConsumer {
+public class NotificationWebSocketConsumer {
 
     private final NotificationWebSocketHandler notificationWebSocketHandler;
 
