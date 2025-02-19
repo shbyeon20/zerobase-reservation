@@ -16,6 +16,7 @@ public class RabbitmqConfiguration {
 
     public static final String QUEUE_ALARM_SOCKET = "queue.alarm.socket";
     public static final String QUEUE_ALARM_PUSH = "queue.alarm.push";
+    public static final String QUEUE_ALARM_SAVE = "queue.alarm.save";
     public static final String EXCHANGE_RESERVATION = "exchange.reservation";
     public static final String ROUTING_KEY_REJECT = "reject";
 
@@ -30,6 +31,12 @@ public class RabbitmqConfiguration {
     }
 
     @Bean
+    public Queue queueAlarmSave() {
+        return new Queue(QUEUE_ALARM_SAVE,true);
+    }
+
+
+    @Bean
     public DirectExchange exchangeAlarm() {
         return new DirectExchange(EXCHANGE_RESERVATION);
     }
@@ -42,6 +49,11 @@ public class RabbitmqConfiguration {
     @Bean
     public Binding bindAlarmPush(Queue queueAlarmPush, DirectExchange directExchange) {
         return BindingBuilder.bind(queueAlarmPush).to(directExchange).with(ROUTING_KEY_REJECT);
+    }
+
+    @Bean
+    public Binding bindAlarmSAVE(Queue queueAlarmSave, DirectExchange directExchange) {
+        return BindingBuilder.bind(queueAlarmSave).to(directExchange).with(ROUTING_KEY_REJECT);
     }
 
     @Bean
