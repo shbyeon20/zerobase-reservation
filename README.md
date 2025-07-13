@@ -43,4 +43,4 @@
 ![reservation (1)](https://github.com/user-attachments/assets/64746c4b-7cf5-4b06-946f-1abed967134d)
 
 
-<img width="974" height="1080" alt="UML (2)" src="https://github.com/user-attachments/assets/f1d9d712-4a79-43d2-b265-23af99156123" />
+<img width="500" height="500" alt="UML (2)" src="https://github.com/user-attachments/assets/f1d9d712-4a79-43d2-b265-23af99156123" />
